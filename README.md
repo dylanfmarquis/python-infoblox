@@ -8,8 +8,9 @@ requests
 
 Setup
 ----
+```bash
 export PYTHONPATH=$PYTHONPATH:/home/foo/python-infoblox
-
+```
 Initilization
 ----
 ```python
