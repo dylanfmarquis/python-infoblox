@@ -291,7 +291,7 @@ class infoblox(object):
 	                return 0
 	
 
-		def update(self,ip=None,mac=None):
+		def update(self,ip=None,mac=None,ttl=None):
                         """
                         update - Update a Host record with new attributes
 
@@ -299,6 +299,14 @@ class infoblox(object):
                                         ttl (int)               Optional: MAC address of a host record
                         output          0 (int)                 Success
                         """
+			if ttl != None:
+				payload = '{{"ttl": {0}}}'.format(ttl)
+				resp = self.infoblox_.put(self._ref, payload)
+				if resp.status_code != 200:
+					try:
+                                        	return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'.format(self.hostname, resp.status_code), resp.status_code)
+					except:
+						return resp.status_code
 			if ip != None and mac == None:
 				try:
 					mac = self.fetch()['ipv4addrs'][0]['mac']
