@@ -611,7 +611,7 @@ class infoblox(object):
                         _ref - Get _ref for a specified host record
                         
                         input           void (void)
-                        output          host _ref               _ref ID for  A record
+                        output          host _ref               _ref ID for A record
                         """
 			try:
 				return self.fetch()['_ref']
@@ -669,7 +669,7 @@ class infoblox(object):
                         resp = self.infoblox_.delete(self._ref)
                         if resp.status_code != 201:
                                 try:
-                                        return self.infoblox_.__caller__('Could not delete CNAME record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)
+                                        return self.infoblox_.__caller__('Could not delete A record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)
                                 except:
                                         return resp.status_code
                         return 0
