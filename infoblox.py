@@ -170,7 +170,7 @@ class infoblox(object):
 		return handle
 
 
-	def subnet(self,subnet=None):
+	def subnet(self, subnet=None):
                 """
                 subnet - subnet object
 
@@ -181,7 +181,7 @@ class infoblox(object):
 		return handle
 
 
-	def lease(self,address=None):
+	def lease(self, address):
                 """
                 lease - lease object
 
@@ -191,13 +191,24 @@ class infoblox(object):
 		handle = self._lease(self, address)
 		return handle
 
+	
+	def a(self, name):
+		"""
+		a - A record object
 
-	def cname(self,name=None):
+		input		name (string)		DNS name of an A record
+		output		handle (handle)		Reference to A record object
+		"""
+		handle = self._a(self, name)
+		return handle
+
+
+	def cname(self, name):
                 """
                 cname - CNAME record object
 
                 input           name (string)        	Domain name of CNAME       
-                output          handle (handle)         Reference to lease object      
+                output          handle (handle)         Reference to CNAME object      
                 """
 		handle = self._cname(self, name)
 		return handle
@@ -580,6 +591,110 @@ class infoblox(object):
 					return resp.status_code
 			return json.loads(resp.text)
 
+	class _a(object):
+		
+		def __init__(self, infoblox_, name):
+			"""
+			class constructor - Automatically called on class instantiation
+                        
+                        input           infoblox_ (object)      Parent class object
+                                        name (string)           DNS name of A Record
+                        output          void (void)
+                        """
+			self.infoblox_ = infoblox_
+			self.name = name
+			self._ref = self._ref()
+
+		
+		def _ref(self):
+                        """
+                        _ref - Get _ref for a specified host record
+                        
+                        input           void (void)
+                        output          host _ref               _ref ID for  A record
+                        """
+			try:
+				return self.fetch()['_ref']
+			except:
+				return None
+
+		def fetch(self):
+                        """
+                        fetch - Retrieve all information from a specified A record
+                        
+                        input           void (void)
+                        output          resp (parsed json)      Parsed JSON response
+                        """
+                        resp = self.infoblox_.get('record:a?name~={0}'.format(self.name))
+                        if resp.status_code != 200:
+                                try:
+                                        return self.infoblox_.__caller__('Could not retrieve A record _ref for {0} - Status {1}'.format(self.name, resp.status_code), resp.status_code)
+                                except:
+                                        return resp.status_code
+                        try:
+                                return json.loads(resp.text)[0]
+
+                        except(ValueError,IndexError):
+                                return None
+
+
+                def add(self, ip, ttl=None):
+                        """
+                        add - Create A record
+
+                        input           ip (string)      	IP Address of A Record
+                                        ttl (int)               Optional: Time to live
+                        output          0 (int)                 Success
+                        """
+                        if ttl != None:
+                                payload = '{{"name":"{0}","ipv4addr":"{1}","ttl":{2}}}'.format(self.name, ip,ttl)
+                        else:
+                                payload = '{{"name":"{0}","ipv4addr":"{1}"}}'.format(self.name, ip)
+                        resp = self.infoblox_.post('record:a',payload)
+                        if resp.status_code != 201:
+                                try:
+                                        return self.infoblox_.__caller__('Could not create A record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)
+                                except:
+                                        return resp.status_code
+                        return 0
+
+
+                def delete(self):
+                        """
+                        delete - Delete A record
+
+                        input           void (void)
+                        output          0 (int)                 Success
+                        """
+                        resp = self.infoblox_.delete(self._ref)
+                        if resp.status_code != 201:
+                                try:
+                                        return self.infoblox_.__caller__('Could not delete CNAME record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)
+                                except:
+                                        return resp.status_code
+                        return 0
+
+
+                def update(self, ip=None, ttl=None):
+                        """
+                        update - Update a CNAME record with new attributes
+
+                        input           ip (string)      	Optional: IP Address of A Record
+                                        ttl (int)               Optional: Time to live
+                        output          0 (int)                 Success
+                        """
+                        if ip != None:
+                                payload = '{{"ipv4addr":"{0}"}}'.format(ip)
+                        if ttl != None:
+                                payload = '{{"ttl":{0}}}'.format(ttl)
+                        resp = self.infoblox_.put(self._ref,payload)
+                        if resp.status_code != 200:
+                                try:
+                                        return self.infoblox_.__caller__('Could not update A record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)
+                                except:
+                                        return resp.status_code
+                        return 0
+
 
 	class _cname(object):
 
@@ -599,10 +714,10 @@ class infoblox(object):
 
                 def _ref(self):
                         """
-                        _ref - Get _ref for a specified host record
+                        _ref - Get _ref for a specified CNAME record
                         
                         input           void (void)
-                        output          host _ref               _ref ID for a host record
+                        output          host _ref               _ref ID for CNAME record
                         """
                         try:
                                 return self.fetch()['_ref']
@@ -612,7 +727,7 @@ class infoblox(object):
 
                 def fetch(self):
                         """
-                        fetch - Retrieve all information from a specified host record
+                        fetch - Retrieve all information from a specified CNAME record
                         
                         input           void (void)
                         output          resp (parsed json)      Parsed JSON response
