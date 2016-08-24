@@ -228,7 +228,10 @@ class infoblox(object):
                         self.infoblox_ = infoblox_
                         if hostname != None:
                                 self.hostname = hostname
-                                self._ref = self._ref()
+                                try:
+                                    self._ref = self._ref()
+                                except:
+                                    pass
         
 
                 def _ref(self):
@@ -323,7 +326,7 @@ class infoblox(object):
                                 try:
                                         mac = self.fetch()['ipv4addrs'][0]['mac']
                                 except:
-                                        pass
+                                        mac = ''
                                 if re.match('(?:[0-9a-fA-F]:?){12}',mac):
                                         payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(ip, mac)
                                 else:
@@ -332,12 +335,12 @@ class infoblox(object):
                                 payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(self.fetch()['ipv4addrs'][0]['ipv4addr'], mac)
                         if mac != None and ip != None:
                                 payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(ip, mac)
-                        resp = self.infoblox_.put(self._ref, payload)
-                        if resp.status_code != 201:
-                                try:
-                                        return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'.format(self.hostname, resp.status_code), resp.status_code)
-                                except:
-                                        return resp.status_code
+                                resp = self.infoblox_.put(self._ref, payload)
+                                if resp.status_code != 200:
+                                        try:
+                                                return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'.format(self.hostname, resp.status_code), resp.status_code)
+                                        except:
+                                                return resp.status_code
                         return 0
 
 
@@ -673,7 +676,7 @@ class infoblox(object):
                         output          0 (int)                     Success
                         """
                         resp = self.infoblox_.delete(self._ref)
-                        if resp.status_code != 201:
+                        if resp.status_code != 200:
                                 try:
                                         return self.infoblox_.__caller__('Could not delete A record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)
                                 except:
@@ -780,7 +783,7 @@ class infoblox(object):
                         output          0 (int)                     Success
                         """
                         resp = self.infoblox_.delete(self._ref)
-                        if resp.status_code != 201:
+                        if resp.status_code != 200:
                                 try:
                                         return self.infoblox_.__caller__('Could not delete CNAME record for {0} - Status {1}'.format(self.name,resp.status_code), resp.status_code)       
                                 except:
