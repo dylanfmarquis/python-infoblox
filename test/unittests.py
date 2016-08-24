@@ -1,0 +1,167 @@
+import sys
+import re
+sys.path.append('.')
+sys.path.append('../')
+from infoblox import infoblox
+
+def callback(error):
+    log = open(TEST_LOG, 'a')
+    log.write('{0}\n'.format(error))
+    log.close()
+
+
+TEST_IP = '10.4.19.234'
+TEST_IP_1 = '10.4.19.233'
+TEST_SUBNET = '10.4.19.0/24'
+TEST_LOG = './unittests.log'
+TEST_HOST_RECORD = 'python-infoblox.example.com'
+TEST_HOST_RECORD_1 = 'python-infoblox1.example.com'
+TEST_CNAME = 'python-infoblox2.example.com'
+TEST_MAC = 'aa:bb:cc:dd:ee:ff'
+
+iblox = infoblox(callback=callback)
+
+def test_host_add():
+    host = iblox.host(TEST_HOST_RECORD)
+    if host.add(TEST_IP) == 0:
+        print("Host record creation: PASSED")
+    else:
+        print("Host record creation: FAILED")
+
+
+def test_host_update():
+    host = iblox.host(TEST_HOST_RECORD)
+    if host.update(ttl=500) == 0:
+        print("Host record TTL mod: PASSED")
+    else:
+        print("Host record TTL mod: FAILED")
+
+    if host.update(mac=TEST_MAC) == 0:
+        print("Host record MAC mod: PASSED")
+    else:
+        print("Host record MAC mod: FAILED")
+
+    if host.update(ip=TEST_IP_1) == 0:
+        print("Host record IP mod: PASSED")
+    else:
+        print("Host record IP mod: FAILED")
+
+    if host.update(ip=TEST_IP,mac=TEST_MAC) == 0:
+        print("Host record IP/MAC mod: PASSED")
+    else:
+        print("Host record IP/MAC mod: FAILED")
+
+
+def test_host_alias():
+    host = iblox.host(TEST_HOST_RECORD)
+    if host.alias().add(TEST_CNAME) == 0:
+        print("Host record Alias add: PASSED")
+    else:
+        print("Host record Alias add: FAILED")
+
+    if host.alias().delete(TEST_CNAME) == 0:
+        print("Host record Alias delete: PASSED")
+    else:
+        print("Host record Alias delete: FAILED")
+
+
+def test_host_delete():
+    host = iblox.host(TEST_HOST_RECORD)
+    if host.delete() == 200:
+        print("Host record deletion: PASSED")
+    else:
+        print("Host record deletion: FAILED")
+
+
+def test_grid_restart():
+    if iblox.grid().restart() == 0:
+        print("Grid restart: PASSED")
+    else:
+        print("Grid restart: FAILED")
+
+
+def test_subnet_query():
+    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",iblox.subnet(TEST_SUBNET).next_available_ip(offset=1)) or iblox.subnet(TEST_SUBNET).next_available_ip(offset=1) is None:
+        print("Subnet query: PASSED")
+    else:
+        print("Subnet query: FAILED")
+
+
+def test_lease_query():
+    if type(iblox.lease(TEST_IP).fetch('discovered_data')) == type([]):
+        print("Lease query: PASSED")
+    else:
+        print("Lease query: FAILED")
+
+
+def test_a_add():
+    if iblox.a(TEST_HOST_RECORD).add(TEST_IP) == 0:
+        print("A record creation: PASSED")
+    else:
+        print("A record creation: FAILED")
+
+
+def test_a_update():
+    a = iblox.a(TEST_HOST_RECORD)
+    if a.update(ttl=700) == 0:
+        print("A record TTL mod: PASSED")
+    else:
+        print("A record TTL mod: FAILED")
+    if a.update(ip=TEST_IP_1) == 0:
+        print("A record IP mod: PASSED")
+    else:
+        print("A record IP mod: FAILED")
+
+
+def test_a_delete():
+    a = iblox.a(TEST_HOST_RECORD)
+    if a.delete() == 0:
+        print("A record deletion: PASSED")
+    else:
+        print("A record deletion: FAILED")
+
+
+def test_cname_add():
+    cname = iblox.cname(TEST_CNAME)
+    if cname.add(TEST_HOST_RECORD) == 0:
+        print("CNAME record creation: PASSED")
+    else:
+        print("CNAME record creation: FAILED")
+
+
+def test_cname_update():
+    cname = iblox.cname(TEST_CNAME)
+    if cname.update(canonical=TEST_HOST_RECORD_1) == 0:
+        print("CNAME record IP mod: PASSED")
+    else:
+        print("CNAME record IP mod: FAILED")
+    if cname.update(ttl=600) == 0:
+        print("CNAME record TTL mod: PASSED")
+    else:
+        print("CNAME record TTL mod: FAILED")
+
+
+def test_cname_delete():
+    cname = iblox.cname(TEST_CNAME)
+    if cname.delete() == 0:
+        print("CNAME record deletion: PASSED")
+    else:
+        print("CNAME record deletion: FAILED")
+
+
+print('\n')
+test_host_add()
+test_host_update()
+test_host_alias()
+test_host_delete()
+test_subnet_query()
+test_lease_query()
+test_a_add()
+test_a_update()
+test_cname_add()
+iblox.a(TEST_HOST_RECORD_1).add(TEST_IP)
+test_cname_update()
+test_cname_delete()
+test_a_delete()
+a = iblox.a(TEST_HOST_RECORD_1)
+test_grid_restart()
