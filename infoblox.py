@@ -322,6 +322,7 @@ class infoblox(object):
                                                 return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'.format(self.hostname, resp.status_code), resp.status_code)
                                         except:
                                                 return resp.status_code
+                                return 0
                         if ip != None and mac == None:
                                 try:
                                         mac = self.fetch()['ipv4addrs'][0]['mac']
@@ -335,12 +336,12 @@ class infoblox(object):
                                 payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(self.fetch()['ipv4addrs'][0]['ipv4addr'], mac)
                         if mac != None and ip != None:
                                 payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(ip, mac)
-                                resp = self.infoblox_.put(self._ref, payload)
-                                if resp.status_code != 200:
-                                        try:
-                                                return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'.format(self.hostname, resp.status_code), resp.status_code)
-                                        except:
-                                                return resp.status_code
+                        resp = self.infoblox_.put(self._ref, payload)
+                        if resp.status_code != 200:
+                                try:
+                                        return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'.format(self.hostname, resp.status_code), resp.status_code)
+                                except:
+                                        return resp.status_code
                         return 0
 
 
