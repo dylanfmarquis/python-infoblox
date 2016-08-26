@@ -31,6 +31,16 @@ def test_host_add():
         count += 1
     return count
 
+def test_host_add_mac():
+    count = 0
+    host = iblox.host(TEST_HOST_RECORD)
+    if host.add(TEST_IP,mac=TEST_MAC) == 0:
+        print("Host record IP/MAC creation: PASSED")
+    else:
+        print("Host record IP/MAC creation: FAILED")
+        count += 1
+    return count
+
 def test_host_update():
     count = 0
     host = iblox.host(TEST_HOST_RECORD)
@@ -199,5 +209,7 @@ count += test_cname_update()
 count += test_cname_delete()
 count += test_a_delete()
 a = iblox.a(TEST_HOST_RECORD_1)
+count += test_host_add_mac
+iblox.host(TEST_HOST_RECORD).delete()
 count += test_grid_restart()
 print('\nTEST COMPLETED WITH {0} ERRORS\n'.format(count))
