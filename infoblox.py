@@ -260,7 +260,6 @@ class infoblox(object):
             try:
                 return self.fetch()['_ref']
             except Exception as e:
-                print e
                 return None
 
 
@@ -279,13 +278,11 @@ class infoblox(object):
                                                      .format(self.hostname, resp.status_code),
                                                      resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             try:
                 return json.loads(resp.text)[0]
 
             except(ValueError,IndexError) as e:
-                print e
                 return None
 
 
@@ -312,7 +309,6 @@ class infoblox(object):
                                                      .format(ip, self.hostname, resp.status_code),
                                                      resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -333,7 +329,6 @@ class infoblox(object):
                                                      .format(self.hostname, resp.status_code),
                                                      resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -356,13 +351,11 @@ class infoblox(object):
                                                          .format(self.hostname, resp.status_code),
                                                          resp.status_code)
                     except Exception as e:
-                        print e
                         return resp.status_code
             if ip != None and mac == None:
                 try:
                     mac = self.fetch()['ipv4addrs'][0]['mac']
                 except Exception as e:
-                    print e
                     pass
                 if re.match('(?:[0-9a-fA-F]:?){12}',mac):
                     payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(ip, mac)
@@ -370,17 +363,16 @@ class infoblox(object):
                     payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}"}}]}}'.format(ip)
             if mac != None and ip == None:
                 payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'\
-                          .format(self.fetch()['ipv4addrs'][0]['ipv4addr'], mac)
+                        .format(self.fetch()['ipv4addrs'][0]['ipv4addr'], mac)
             if mac != None and ip != None:
                 payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(ip, mac)
             resp = self.infoblox_.put(self._ref, payload)
-            if resp.status_code != 201:
+            if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'\
                                                      .format(self.hostname, resp.status_code),
                                                      resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -428,12 +420,10 @@ class infoblox(object):
                                                                  resp.status_code),
                                                          resp.status_code)
                     except Exception as e:
-                        print e
                         return resp.status_code
                 try:
                     return json.loads(resp.text)[0]['aliases']
                 except Exception as e:
-                    print e
                     return []
 
 
@@ -457,7 +447,6 @@ class infoblox(object):
                             'Could not set aliases for {0} - Status {1}'\
                             .format(self.host_.hostname, resp.status_code), resp.status_code)
                     except Exception as e:
-                        print e
                         return resp.status_code
                 return 0
 
@@ -483,7 +472,6 @@ class infoblox(object):
                             'Could not unset aliases for {0} - Status {1}'\
                             .format(self.host_.hostname, resp.status_code), resp.status_code)
                     except Exception as e:
-                        print e
                         return resp.status_code
                 return 0
 
@@ -517,7 +505,6 @@ class infoblox(object):
                         'Could not get grid _ref - Status {0}'\
                         .format(resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return json.loads(resp.text)[0]['_ref']
 
@@ -531,7 +518,7 @@ class infoblox(object):
                     1 (int)                 Failure
             """
             resp = self.infoblox_.post('{0}?_function=restartservices&member_order=SEQUENTIALLY'\
-                                       ' &sequential_delay=10&service_option=ALL'\
+                                       '&sequential_delay=10&service_option=ALL'\
                                        '&restart_option=FORCE_RESTART'\
                                        .format(self._ref), '')
             if resp.status_code != 200:
@@ -540,7 +527,6 @@ class infoblox(object):
                         'Could not restart Infoblox gridmaster - Status {0}'\
                         .format(resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -578,7 +564,6 @@ class infoblox(object):
                         'Error getting subnet ID for subnet {0} - Status {1}'\
                         .format(self.subnet, resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return json.loads(resp.text)[0]['_ref']
 
@@ -603,12 +588,10 @@ class infoblox(object):
                         'Error retrieving next available address - Status {0}'\
                         .format(resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             try:
                 return json.loads(resp.text)['ips'][offset-1]
             except Exception as e:
-                print e
                 return None
 
 
@@ -674,7 +657,6 @@ class infoblox(object):
                         'Error fetching data from least {0} - Status {1}'\
                         .format(self.address, resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return json.loads(resp.text)
 
@@ -704,7 +686,6 @@ class infoblox(object):
             try:
                 return self.fetch()['_ref']
             except Exception as e:
-                print e
                 return None
 
 
@@ -722,13 +703,11 @@ class infoblox(object):
                         'Could not retrieve A record _ref for {0} - Status {1}'\
                         .format(self.name, resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             try:
                 return json.loads(resp.text)[0]
 
             except (ValueError,IndexError) as e:
-                print e
                 return None
 
 
@@ -751,7 +730,6 @@ class infoblox(object):
                         'Could not create A record for {0} - Status {1}'\
                         .format(self.name,resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -764,13 +742,12 @@ class infoblox(object):
             output  0 (int)                 Success
             """
             resp = self.infoblox_.delete(self._ref)
-            if resp.status_code != 201:
+            if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__(
                         'Could not delete A record for {0} - Status {1}'\
                         .format(self.name,resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -794,7 +771,6 @@ class infoblox(object):
                         'Could not update A record for {0} - Status {1}'\
                         .format(self.name,resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -825,7 +801,6 @@ class infoblox(object):
             try:
                 return self.fetch()['_ref']
             except Exception as e:
-                print e
                 return None
 
 
@@ -843,13 +818,11 @@ class infoblox(object):
                         'Could not retrieve CNAME _ref for {0} - Status {1}'\
                         .format(self.name, resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             try:
                 return json.loads(resp.text)[0]
 
             except (ValueError,IndexError) as e:
-                print e
                 return None
 
 
@@ -873,7 +846,6 @@ class infoblox(object):
                         'Could not create CNAME record for {0} - Status {1}'\
                         .format(self.name,resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -886,13 +858,12 @@ class infoblox(object):
             output  0 (int)                 Success
             """
             resp = self.infoblox_.delete(self._ref)
-            if resp.status_code != 201:
+            if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__(
                         'Could not delete CNAME record for {0} - Status {1}'\
                         .format(self.name,resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
 
@@ -915,6 +886,5 @@ class infoblox(object):
                         'Could not update CNAME record for {0} - Status {1}'\
                         .format(self.name,resp.status_code), resp.status_code)
                 except Exception as e:
-                    print e
                     return resp.status_code
             return 0
