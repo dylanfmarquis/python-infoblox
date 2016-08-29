@@ -193,9 +193,6 @@ def test_cname_delete():
         count += 1
     return count
 
-my_resolver = dns.resolver.Resolver()
-my_resolver.nameservers = ['137.99.25.14']
-
 print('\nStarting python-infoblox Unit Test...\n')
 count = 0
 count += test_host_add()
