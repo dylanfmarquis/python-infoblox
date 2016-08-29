@@ -193,6 +193,9 @@ def test_cname_delete():
         count += 1
     return count
 
+my_resolver = dns.resolver.Resolver()
+my_resolver.nameservers = ['137.99.25.14']
+
 print('\nStarting python-infoblox Unit Test...\n')
 count = 0
 count += test_host_add()
@@ -204,12 +207,12 @@ count += test_lease_query()
 count += test_a_add()
 count += test_a_update()
 count += test_cname_add()
-iblox.a(TEST_HOST_RECORD_1).add(TEST_IP)
+iblox.host(TEST_HOST_RECORD_1).add(TEST_IP)
 count += test_cname_update()
 count += test_cname_delete()
 count += test_a_delete()
-a = iblox.a(TEST_HOST_RECORD_1)
-count += test_host_add_mac
+count += test_host_add_mac()
+iblox.host(TEST_HOST_RECORD_1).delete()
 iblox.host(TEST_HOST_RECORD).delete()
 count += test_grid_restart()
 print('\nTEST COMPLETED WITH {0} ERRORS\n'.format(count))
