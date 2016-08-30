@@ -44,7 +44,7 @@ class infoblox(object):
         return int(errno)
 
 
-    def __init__(self, callback=None, auth=None, vers='v1.7.1'):
+    def __init__(self, callback=None, auth={}, vers='v1.7.1'):
         """
         class constructor - Automatically called on class instantiation
 
@@ -54,13 +54,9 @@ class infoblox(object):
         """
         self.callback = callback
         self.vers = vers
-        if auth != None:
-            self.url = auth['url']
-            self.creds = base64.b64encode('{0}:{1}'.format(auth['user'], auth['passwd']))
-        else:
-            l_ret = self.auth()
-            self.url = l_ret[0]
-            self.creds = l_ret[1]
+        l_ret = self.auth(auth)
+        self.url = l_ret[0]
+        self.creds = l_ret[1]
 
 
     def __del__(self):
@@ -72,7 +68,7 @@ class infoblox(object):
         self.post('logout','')
 
 
-    def auth(self):
+    def auth(self, auth):
         """
         auth - Authenticate to the Infoblox WAPI
 
@@ -82,9 +78,18 @@ class infoblox(object):
                                 1 - Base64 encoded Infoblox username and password
         """
         while(1):
-            url = raw_input('Infoblox URL: ')
-            user = raw_input('Infoblox Username: ')
-            passwd = getpass.getpass()
+            if auth.get('url'):
+                url = auth['url']
+            else:
+                url = raw_input('Infoblox URL: ')
+            if auth.get('user'):
+                user = auth['user']
+            else:
+                user = raw_input('Infoblox Username: ')
+            if auth.get('passwd'):
+                passwd = auth['passwd']
+            else:
+                passwd = getpass.getpass()
             creds = base64.b64encode('{0}:{1}'.format(user, passwd))
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
