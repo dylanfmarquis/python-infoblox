@@ -239,15 +239,14 @@ class infoblox(object):
         return handle
 
     
-    def recordmx(self, name):
+    def mx(self, name):
         """
         recordmx - Record:mx (Mail Exchanger) object
 
         input   name (string)       TBD
         output  handle (handle)     Reference to record:mx object
         """
-
-        handle = self._recordmx(self, name)
+        handle = self._mx(self, name)
         return handle
 
 
@@ -644,7 +643,7 @@ class infoblox(object):
                     return False
             return True
 
-    class _recordmx(object):
+    class _mx(object):
 
 
         def __init__(self, infoblox_, mail_exchanger):
