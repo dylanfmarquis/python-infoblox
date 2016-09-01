@@ -57,7 +57,7 @@ class infoblox(object):
         self.vers = vers
         l_ret = self.auth(auth)
         self.url = l_ret[0]
-        self.creds = l_ret[1] 
+        self.creds = l_ret[1]
 
 
     def __del__(self):
