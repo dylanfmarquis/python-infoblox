@@ -50,6 +50,7 @@ foo.update(ttl=500)
 
 #Update MAC
 foo.update(mac='aa:bb:cc:dd:ee')
+
 #Delete host record
 foo.delete()
 ```
@@ -87,6 +88,7 @@ a.delete()
 ```
 CNAME Record
 ----
+```python
 #Add CNAME
 cname = iblox.cname('c.example.com')
 cname.add('con.example.com')
