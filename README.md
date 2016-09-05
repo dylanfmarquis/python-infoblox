@@ -4,7 +4,7 @@ Python module for interfacing with Infoblox using the Infoblox WAPI.
 
 Dependancies
 ----
-requests
+requests - http://python-requests.org
 
 Setup
 ----
@@ -21,11 +21,15 @@ iblox = infoblox()
 
 #Specify Credentials
 iblox = infoblox(auth={'url':'infoblox.example.com','user':'myuser','passwd':'Secret123'})
+
+#Partial credentials can be specified as well
+iblox = infoblox(auth={'url':'infoblox.example.com'})
+iblox = infoblox(auth={'url':'infoblox.example.com','user':'myuser'})
 ```
 Callback
 ----
 ```python
-#The module can be instatiated with a callback for logging/debugging
+#The module can be instantiated with a callback for logging/debugging
 def callback(error):
     print error
 
@@ -35,24 +39,27 @@ Host Record
 ----
 ```python
 #Create a host record
-foo = iblox.host('foo.example.com')
-foo.add('10.1.1.12')
+h = iblox.host('foo.example.com')
+h.add('10.1.1.12')
 iblox.host(foo2.example.com).add('10.1.1.13',mac='aa:bb:cc:dd:ee')
 
+#Query information on a specified host record
+h.fetch()
+
 #Add an alias
-foo.alias().add('bar.example.com')
+h.alias().add('bar.example.com')
 
 #Delete an alias
-foo.alias().delete('bar.example.com')
+h.alias().delete('bar.example.com')
 
 #Update TTL
-foo.update(ttl=500)
+h.update(ttl=500)
 
 #Update MAC
-foo.update(mac='aa:bb:cc:dd:ee')
+h.update(mac='aa:bb:cc:dd:ee')
 
 #Delete host record
-foo.delete()
+h.delete()
 ```
 Grid
 ----
