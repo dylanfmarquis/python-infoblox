@@ -9,7 +9,8 @@ requests - http://python-requests.org
 Setup
 ----
 ```bash
-export PYTHONPATH=$PYTHONPATH:/home/foo/python-infoblox
+mv ./python-infoblox ./infoblox
+export PYTHONPATH=$PYTHONPATH:/home/foo/infoblox
 ```
 Initialization
 ----
@@ -44,7 +45,7 @@ h.add('10.1.1.12')
 iblox.host(foo2.example.com).add('10.1.1.13',mac='aa:bb:cc:dd:ee')
 
 #Query information on a specified host record
-h.fetch()
+print h.fetch()
 
 #Add an alias
 h.alias().add('bar.example.com')
@@ -86,6 +87,9 @@ A Record
 a = iblox.a('foo.example.com')
 a.add('10.1.1.12')
 
+#Query information on a specified A record
+print a.fetch()
+
 #Update IP/MAC
 a.update(ip='10.1.1.13')
 a.update(mac='aa:bb:cc:dd:ee')
@@ -100,10 +104,21 @@ CNAME Record
 cname = iblox.cname('c.example.com')
 cname.add('con.example.com')
 
+#Query information on a specified CNAME record
+print cname.fetch()
+
 #Update TTL/Canonical
 cname.update(ttl=600)
 cname.update(canonical='foo.example.com')
 
 #Delete CNAME
 cname.delete()
+```
+MX Record
+----
+```python
+mx = iblox.mx('mail.example.com')
+
+#Query information on a specified MX record
+print mx.fetch()
 ```
