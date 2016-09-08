@@ -1059,7 +1059,6 @@ class infoblox(object):
             payload = '{{"target": "{0}", "weight": {1}, "name": "{2}", "priority": {3}'\
                       ',"port": {4}}}'\
                       .format(target, weight, self.name, priority, self.port)
-            print payload
             resp = self.infoblox_.put(self._ref, payload)                                       
             if resp.status_code != 201:                                                             
                 try:                                                                                
