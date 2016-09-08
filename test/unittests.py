@@ -18,6 +18,7 @@ TEST_HOST_RECORD = 'python-infoblox.example.com'
 TEST_HOST_RECORD_1 = 'python-infoblox1.example.com'
 TEST_CNAME = 'python-infoblox2.example.com'
 TEST_MAC = 'aa:bb:cc:dd:ee:ff'
+TEST_SRV = '_pytest._tcp.example.com'
 
 iblox = infoblox(callback=callback)
 
@@ -106,7 +107,9 @@ def test_grid_restart():
 
 def test_subnet_query():
     count = 0
-    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",iblox.subnet(TEST_SUBNET).next_available_ip(offset=1)) or iblox.subnet(TEST_SUBNET).next_available_ip(offset=1) is None:
+    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",iblox.subnet(TEST_SUBNET)\
+                .next_available_ip(offset=1))\
+                or iblox.subnet(TEST_SUBNET).next_available_ip(offset=1) is None:
         print("Subnet query: PASSED")
     else:
         print("Subnet query: FAILED")
@@ -193,6 +196,51 @@ def test_cname_delete():
         count += 1
     return count
 
+def test_srv_add():
+    count = 0
+    srv = iblox.srv(TEST_SRV, 5555)
+    if srv.add(TEST_HOST_RECORD) == 0:
+        print("SRV record creation: PASSED")
+    else:
+        print("SRV record creation: FAILED")
+        count += 1
+    return count
+
+def test_srv_update():
+    count = 0
+    srv = iblox.srv(TEST_SRV, 5555)
+    iblox.grid().restart()
+    if srv.update(weight=1) == 0:
+        print("SRV record weight mod: PASSED")
+    else:
+        print("SRV record weight mod: FAILED")
+        count += 1
+
+    srv = iblox.srv(TEST_SRV, 5555)
+    if srv.update(priority=1) == 0:
+        print("SRV record priority mod: PASSED")
+    else:
+        print("SRV record priority mod: FAILED")
+        count += 1
+
+    srv = iblox.srv(TEST_SRV, 5555)
+    if srv.update(target=TEST_HOST_RECORD_1) == 0:
+        print("SRV record target mod: PASSED")
+    else:
+        print("SRV record target mod: FAILED")
+        count += 1
+    return count
+
+def test_srv_delete():
+    count =0
+    srv = iblox.srv(TEST_SRV, 5555)
+    if srv.delete() == 0:
+        print("SRV record deletion: PASSED")
+    else:
+        print("SRV record deletion: FAILED")
+        count += 1
+    return count
+
 print('\nStarting python-infoblox Unit Test...\n')
 count = 0
 count += test_host_add()
@@ -211,5 +259,13 @@ count += test_a_delete()
 count += test_host_add_mac()
 iblox.host(TEST_HOST_RECORD_1).delete()
 iblox.host(TEST_HOST_RECORD).delete()
+iblox.grid().restart()
+iblox.host(TEST_HOST_RECORD).add(TEST_IP)
+iblox.host(TEST_HOST_RECORD_1).add(TEST_IP_1)
+count += test_srv_add()
+count += test_srv_update()
+count += test_srv_delete()
+iblox.host(TEST_HOST_RECORD).delete()
+iblox.host(TEST_HOST_RECORD_1).delete()
 count += test_grid_restart()
 print('\nTEST COMPLETED WITH {0} ERRORS\n'.format(count))

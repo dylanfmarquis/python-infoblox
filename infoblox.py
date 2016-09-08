@@ -1015,9 +1015,9 @@ class infoblox(object):
             resp = self.infoblox_.post('record:srv',payload)                                       
             if resp.status_code != 201:                                                             
                 try:                                                                                
-                    return self.infoblox_.__caller__('Error creating srv record {0} for {1}'\
-                                                     ' - Status: {2}'\
-                                                     .format(ip, self.name, resp.status_code),  
+                    return self.infoblox_.__caller__('Error creating srv record {0}'\
+                                                     ' - Status: {1}'\
+                                                     .format(self.name, resp.status_code),  
                                                      resp.status_code)                              
                 except Exception as e:                                                              
                     return resp.status_code                                                         
@@ -1032,7 +1032,7 @@ class infoblox(object):
                     errno (int)         Error code of API call                                      
             """                                                                                     
             resp = self.infoblox_.delete(self._ref)                                                 
-            if resp.status_code != 201:                                                             
+            if resp.status_code != 200:
                 try:                                                                                
                     return self.infoblox_.__caller__('Error deleting SRV record {0} for {1}'\
                                                      ' - Status: {2}'\
@@ -1059,13 +1059,12 @@ class infoblox(object):
             payload = '{{"target": "{0}", "weight": {1}, "name": "{2}", "priority": {3}'\
                       ',"port": {4}}}'\
                       .format(target, weight, self.name, priority, self.port)
-            print payload
             resp = self.infoblox_.put(self._ref, payload)                                       
-            if resp.status_code != 201:                                                             
+            if resp.status_code != 200:
                 try:                                                                                
-                    return self.infoblox_.__caller__('Error creating srv record {0} for {1}'\
-                                                     ' - Status: {2}'\
-                                                     .format(ip, self.name, resp.status_code),  
+                    return self.infoblox_.__caller__('Error updating srv record {0}'\
+                                                     ' - Status: {1}'\
+                                                     .format(self.name, resp.status_code),  
                                                      resp.status_code)                              
                 except Exception as e:                                                              
                     return resp.status_code                                                         
