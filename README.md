@@ -42,7 +42,7 @@ Host Record
 #Create a host record
 h = iblox.host('foo.example.com')
 h.add('10.1.1.12')
-iblox.host(foo2.example.com).add('10.1.1.13',mac='aa:bb:cc:dd:ee')
+iblox.host('foo2.example.com').add('10.1.1.13',mac='aa:bb:cc:dd:ee')
 
 #Query information on a specified host record
 print h.fetch()
