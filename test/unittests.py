@@ -209,7 +209,6 @@ def test_srv_add():
 def test_srv_update():
     count = 0
     srv = iblox.srv(TEST_SRV, 5555)
-    iblox.grid().restart()
     if srv.update(weight=1) == 0:
         print("SRV record weight mod: PASSED")
     else:
