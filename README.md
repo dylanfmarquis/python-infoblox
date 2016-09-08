@@ -122,3 +122,19 @@ mx = iblox.mx('mail.example.com')
 #Query information on a specified MX record
 print mx.fetch()
 ```
+SRV Record
+----
+```python
+#Add SRV record for a service that uses port 80
+srv = iblox.srv('_service._tcp.example.com',80)
+srv.add('server.example.com')
+
+#Update the target of a SRV record
+srv.update(target='server2.example.com')
+
+#Update the weight and priority of a SRV record
+srv.update(weight=1, priority=1)
+
+#Delete a SRV record
+srv.delete()
+```
