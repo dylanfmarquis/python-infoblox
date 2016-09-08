@@ -1,6 +1,5 @@
 import sys
 import re
-import time
 sys.path.append('.')
 sys.path.append('../')
 from infoblox import infoblox
