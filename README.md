@@ -72,7 +72,7 @@ Subnet
 ----
 ```python
 #Query next available IP for a given subnet.
-ip = iblox.subnet(10.1.1.1/24).next_available_ip()
+ip = iblox.subnet('10.1.1.0/24').next_available_ip()
 ```
 Lease
 ----
