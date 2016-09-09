@@ -1066,6 +1066,6 @@ class infoblox(object):
                                                      ' - Status: {1}'\
                                                      .format(self.name, resp.status_code),
                                                      resp.status_code)
-                except Exception as e
+                except Exception as e:
                     return resp.status_code
             return 0
