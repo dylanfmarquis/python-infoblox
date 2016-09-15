@@ -547,7 +547,7 @@ class infoblox(object):
             """
             resp = self.infoblox_.post('{0}?_function=restartservices&member_order=SEQUENTIALLY'\
                                        '&sequential_delay=10&service_option=ALL'\
-                                       '&restart_option=FORCE_RESTART'\
+                                       '&restart_option=RESTART_IF_NEEDED'\
                                        .format(self._ref), '')
             if resp.status_code != 200:
                 try:
