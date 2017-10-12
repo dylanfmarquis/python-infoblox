@@ -132,6 +132,10 @@ class InfobloxTest(unittest.TestCase):
     def test_grid_restart(self):
         self.assertTrue(iblox.grid().restart() == 0)
 
+    def test_rpz_cname(self):
+        # TODO: Write unittests
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()

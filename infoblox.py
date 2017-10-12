@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__version__ = '0.2'
+__version__ = '0.3'
 __author__ = 'Dylan F Marquis'
 
 
@@ -24,7 +24,8 @@ import base64
 import getpass
 import warnings
 
-from _internal import _a, _cname, _grid, _host, _lease, _mx, _srv, _subnet
+from _internal import (_a, _cname, _grid, _host, _lease, _mx, _srv, _subnet,
+                       _rpz_cname)
 
 
 # Infoblox Network Management
@@ -43,7 +44,7 @@ class infoblox(object):
             return self.callback(error)
         return int(errno)
 
-    def __init__(self, callback=None, auth={}, vers='v1.7.1'):
+    def __init__(self, callback=None, auth={}, vers='v2.6.1'):
         """
         class constructor - Automatically called on class instantiation
 
@@ -244,3 +245,12 @@ class infoblox(object):
         """
         handle = _srv(self, name, port)
         return handle
+
+    def rpz_cname(self, name):
+        """
+        rpz_cname - A record:rpz:cname object
+
+        input   name (string)       Domain name of the record
+        output  handle (handle)     Reference to record:rpz:cname object
+        """
+        return _rpz_cname(self, name)

@@ -1,7 +1,7 @@
 import json
 
 
-class _cname(object):
+class _rpz_cname(object):
 
     def __init__(self, infoblox_, name):
         """
@@ -29,16 +29,16 @@ class _cname(object):
 
     def fetch(self):
         """
-        fetch - Retrieve all information from a specified CNAME record
+        fetch - Retrieve all information from a specified RPZ CNAME record
 
         input   void (void)
         output  resp (parsed json)      Parsed JSON response
         """
-        resp = self.infoblox_.get('record:cname?name~={0}'.format(self.name))
+        resp = self.infoblox_.get('record:rpz:cname?name~={0}'.format(self.name))
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not retrieve CNAME _ref for {0} - Status {1}'\
+                    'Could not retrieve CNAME _ref for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -48,32 +48,25 @@ class _cname(object):
         except (ValueError, IndexError):
             return None
 
-    def add(self, canonical, ttl=None):
+    def add(self, name, rp_zone, comment="", TTL=None, view=None):
         """
-        add - Create CNAME record
+        add - Create RPZ CNAME record
 
         input   canonical (string)      Canonical address for CNAME record
+                rp_zone (string)        Response policy zone name
+                comment (string)        Optional: An optional comment
                 ttl (int)               Optional: Time to live
+                view (string)           Optional: The view where the record is
         output  0 (int)                 Success
         """
-        if ttl is not None:
-            payload = '{{"name":"{0}","canonical":"{1}","ttl":{2}}}'\
-                      .format(self.name, canonical, ttl)
-        else:
-            payload = '{{"name":"{0}","canonical":"{1}"}}'.format(self.name, canonical)
-        resp = self.infoblox_.post('record:cname', payload)
-        if resp.status_code != 201:
-            try:
-                return self.infoblox_.__caller__(
-                    'Could not create CNAME record for {0} - Status {1}'\
-                    .format(self.name, resp.status_code), resp.status_code)
-            except Exception:
-                return resp.status_code
-        return 0
+        pass
+        # TODO: Build payload
+        # TODO: Make _POST request
+        # TODO: Check status code and return/error out
 
     def delete(self):
         """
-        delete - Delete CNAME record
+        delete - Delete RPZ CNAME record
 
         input   void (void)
         output  0 (int)                 Success
@@ -82,29 +75,24 @@ class _cname(object):
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not delete CNAME record for {0} - Status {1}'\
+                    'Could not delete RPZ CNAME record for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
         return 0
 
-    def update(self, canonical=None, ttl=None):
-        """ update - Update a CNAME record with new attributes
+    def update(self, name, rp_zone, comment="", TTL=None, view=None):
+        """
+        add - Create RPZ CNAME record
 
-        input   canonical (string)      Optional: Canonical address for CNAME record
+        input   canonical (string)      Canonical address for CNAME record
+                rp_zone (string)        Response policy zone name
+                comment (string)        Optional: An optional comment
                 ttl (int)               Optional: Time to live
+                view (string)           Optional: The view where the record is
         output  0 (int)                 Success
         """
-        if canonical is not None:
-            payload = '{{"canonical":"{0}"}}'.format(canonical)
-        if ttl is not None:
-            payload = '{{"ttl":{0}}}'.format(ttl)
-        resp = self.infoblox_.put(self._ref, payload)
-        if resp.status_code != 200:
-            try:
-                return self.infoblox_.__caller__(
-                    'Could not update CNAME record for {0} - Status {1}'\
-                    .format(self.name, resp.status_code), resp.status_code)
-            except Exception:
-                return resp.status_code
-        return 0
+        pass
+        # TODO: Build payload
+        # TODO: Make _PUT request
+        # TODO: Check status code and return/error out

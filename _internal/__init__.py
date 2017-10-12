@@ -6,3 +6,4 @@ from lease import _lease
 from mx import _mx
 from srv import _srv
 from subnet import _subnet
+from rpz_cname import _rpz_cname
