@@ -9,8 +9,9 @@ requests - http://python-requests.org
 Setup
 ----
 ```bash
-mv ./python-infoblox ./infoblox
-export PYTHONPATH=$PYTHONPATH:/home/foo/infoblox
+git clone https://github.com/dylanfmarquis/python-infoblox.git
+cd python-infoblox
+pip install .
 ```
 Initialization
 ----
@@ -36,7 +37,7 @@ def callback(error):
 
 iblox = infoblox(callback=callback)
 ```
-Host Record 
+Host Record
 ----
 ```python
 #Create a host record

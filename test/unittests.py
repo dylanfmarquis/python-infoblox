@@ -2,8 +2,6 @@ import sys
 import re
 import unittest
 
-sys.path.append('.')
-sys.path.append('../')
 from infoblox import infoblox
 
 TEST_LOG = './unittests.log'
