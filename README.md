@@ -11,6 +11,7 @@ Setup
 ```bash
 mv ./python-infoblox ./infoblox
 export PYTHONPATH=$PYTHONPATH:/home/foo/infoblox
+pip install -r requirements.txt
 ```
 Initialization
 ----
@@ -36,7 +37,7 @@ def callback(error):
 
 iblox = infoblox(callback=callback)
 ```
-Host Record 
+Host Record
 ----
 ```python
 #Create a host record
