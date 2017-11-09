@@ -199,7 +199,7 @@ class _host(object):
             str_alias += '"{0}"'.format(str(new_alias))
             payload = '{{"aliases":[{0}]}}'.format(str_alias)
             resp = self.infoblox_.put('{0}'.format(self.host_._ref), payload)
-            if resp.status_code != 200:
+            if resp.status_code != 201:
                 try:
                     return self.infoblox_.__caller__(
                         'Could not set aliases for {0} - Status {1}'\

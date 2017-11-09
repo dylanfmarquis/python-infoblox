@@ -61,6 +61,7 @@ class _cname(object):
                       .format(self.name, canonical, ttl)
         else:
             payload = '{{"name":"{0}","canonical":"{1}"}}'.format(self.name, canonical)
+
         resp = self.infoblox_.post('record:cname', payload)
         if resp.status_code != 201:
             try:
