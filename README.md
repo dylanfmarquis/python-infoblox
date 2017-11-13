@@ -139,3 +139,10 @@ srv.update(weight=1, priority=1)
 #Delete a SRV record
 srv.delete()
 ```
+Unittests
+----
+To run the unittests, simply run the following command from inside the repository.
+```bash
+python -m unittest discover
+```
+Please note that the IP addresses and URLs are what work for us, but you should verify that they will not cause any problems for you before running the unittests.
