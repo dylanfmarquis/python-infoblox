@@ -30,7 +30,7 @@ class _subnet(object):
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Error getting subnet ID for subnet {0} - Status {1}'\
+                    'Error getting subnet ID for subnet {0} - Status {1}'
                     .format(self.subnet, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -41,19 +41,21 @@ class _subnet(object):
         next_available_ip - Get the next available IP address in a subnet.
                             The first results is always the gateway.
 
-        input   offset (int)            Optional arg to provide address offset for
-                                        networking gear/etc not accounted in IPAM
+        input   offset (int)            Optional arg to provide address
+                                        offset for
+                                        networking gear/etc not accounted
+                                        in IPAM
         output  ip_addr (string)        IP address
                 None (null)             No free IP addresses
         """
         payload = '{{"num":{0}}}'.format(offset)
         resp = self.infoblox_.post(
-                    '{0}?_function=next_available_ip'\
+                    '{0}?_function=next_available_ip'
                     .format(self._ref), payload)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Error retrieving next available address - Status {0}'\
+                    'Error retrieving next available address - Status {0}'
                     .format(resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -78,8 +80,8 @@ class _subnet(object):
 
     def subnet_format_check(self, l_subnets):
         """
-        subnet_format_check - Checks to make sure the subnet is properly formatted
-                              in CIDR notation
+        subnet_format_check - Checks to make sure the subnet is properly
+                              formatted in CIDR notation
 
         input   l_subnets (list)        list of subnets in CIDR notation
         output  True (bool)             Subnets are properly formatted

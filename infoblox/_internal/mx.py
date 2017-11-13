@@ -1,5 +1,6 @@
 import json
 
+
 class _mx(object):
 
     def __init__(self, infoblox_, mail_exchanger):
@@ -20,12 +21,14 @@ class _mx(object):
         input   void (void)
         output  resp (parsed json)  Parsed JSON response
         """
-        resp = self.infoblox_.get('record:mx?mail_exchanger~={0}'.format(self.mail_exchanger))
+        resp = self.infoblox_.get(
+            'record:mx?mail_exchanger~={0}'.format(self.mail_exchanger))
         if resp.status_code != 200:
             try:
-                return self.infoblox_.__caller__('Could not retrieve host _ref for {0}'\
-                                                 ' - Status {1}'\
-                                                 .format(self.hostname, resp.status_code),
+                return self.infoblox_.__caller__('Could not retrieve host _ref'
+                                                 ' for {0} - Status {1}'
+                                                 .format(self.hostname,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code

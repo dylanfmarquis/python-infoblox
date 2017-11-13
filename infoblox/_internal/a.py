@@ -1,5 +1,6 @@
 import json
 
+
 class _a(object):
 
     def __init__(self, infoblox_, name):
@@ -37,7 +38,7 @@ class _a(object):
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not retrieve A record _ref for {0} - Status {1}'\
+                    'Could not retrieve A record _ref for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -56,14 +57,15 @@ class _a(object):
         output  0 (int)                 Success
         """
         if ttl is not None:
-            payload = '{{"name":"{0}","ipv4addr":"{1}","ttl":{2}}}'.format(self.name, ip, ttl)
+            payload = '{{"name":"{0}","ipv4addr":"{1}","ttl":{2}}}'.format(
+                self.name, ip, ttl)
         else:
             payload = '{{"name":"{0}","ipv4addr":"{1}"}}'.format(self.name, ip)
         resp = self.infoblox_.post('record:a', payload)
         if resp.status_code != 201:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not create A record for {0} - Status {1}'\
+                    'Could not create A record for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -80,7 +82,7 @@ class _a(object):
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not delete A record for {0} - Status {1}'\
+                    'Could not delete A record for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -102,7 +104,7 @@ class _a(object):
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not update A record for {0} - Status {1}'\
+                    'Could not update A record for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code

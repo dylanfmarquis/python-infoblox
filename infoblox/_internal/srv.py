@@ -39,7 +39,7 @@ class _srv(object):
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
-                    'Could not retrieve SRV _ref for {0} - Status {1}'\
+                    'Could not retrieve SRV _ref for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
@@ -62,9 +62,10 @@ class _srv(object):
         resp = self.infoblox_.post('record:srv', payload)
         if resp.status_code != 201:
             try:
-                return self.infoblox_.__caller__('Error creating srv record {0}'\
-                                                 ' - Status: {1}'\
-                                                 .format(self.name, resp.status_code),
+                return self.infoblox_.__caller__('Error creating srv record '
+                                                 '{0} - Status: {1}'
+                                                 .format(self.name,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code
@@ -81,9 +82,10 @@ class _srv(object):
         resp = self.infoblox_.delete(self._ref)
         if resp.status_code != 200:
             try:
-                return self.infoblox_.__caller__('Error deleting SRV record {0} for {1}'\
-                                                 ' - Status: {2}'\
-                                                 .format(self.name, resp.status_code),
+                return self.infoblox_.__caller__('Error deleting SRV record '
+                                                 '{0} for {1} - Status: {2}'
+                                                 .format(self.name,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code
@@ -109,9 +111,10 @@ class _srv(object):
         resp = self.infoblox_.put(self._ref, payload)
         if resp.status_code != 200:
             try:
-                return self.infoblox_.__caller__('Error updating srv record {0}'\
-                                                 ' - Status: {1}'\
-                                                 .format(self.name, resp.status_code),
+                return self.infoblox_.__caller__('Error updating srv record '
+                                                 '{0} - Status: {1}'
+                                                 .format(self.name,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code

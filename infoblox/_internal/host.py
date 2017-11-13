@@ -39,9 +39,10 @@ class _host(object):
         resp = self.infoblox_.get('record:host?name~={0}'.format(self.hostname))
         if resp.status_code != 200:
             try:
-                return self.infoblox_.__caller__('Could not retrieve host _ref for {0}'\
-                                                 ' - Status {1}'\
-                                                 .format(self.hostname, resp.status_code),
+                return self.infoblox_.__caller__('Could not retrieve host _ref'
+                                                 ' for {0} - Status {1}'
+                                                 .format(self.hostname,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code
@@ -69,9 +70,11 @@ class _host(object):
         resp = self.infoblox_.post('record:host', payload)
         if resp.status_code != 201:
             try:
-                return self.infoblox_.__caller__('Error creating host record {0} for {1}'\
-                                                 ' - Status: {2}'\
-                                                 .format(ip, self.hostname, resp.status_code),
+                return self.infoblox_.__caller__('Error creating host record '
+                                                 '{0} for {1}'
+                                                 ' - Status: {2}'
+                                                 .format(ip, self.hostname,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code
@@ -88,9 +91,10 @@ class _host(object):
         resp = self.infoblox_.delete(self._ref)
         if resp.status_code != 201:
             try:
-                return self.infoblox_.__caller__('Error creating host record {0} for {1}'\
-                                                 ' - Status: {2}'\
-                                                 .format(self.hostname, resp.status_code),
+                return self.infoblox_.__caller__('Error creating host record '
+                                                 '{0} for {1} - Status: {2}'
+                                                 .format(self.hostname,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code
@@ -109,9 +113,11 @@ class _host(object):
             resp = self.infoblox_.put(self._ref, payload)
             if resp.status_code != 200:
                 try:
-                    return self.infoblox_.__caller__('Error updating host record {0}'\
-                                                     '- Status: {1}'\
-                                                     .format(self.hostname, resp.status_code),
+                    return self.infoblox_.__caller__('Error updating host '
+                                                     'record {0}'
+                                                     '- Status: {1}'
+                                                     .format(self.hostname,
+                                                             resp.status_code),
                                                      resp.status_code)
                 except Exception:
                     return resp.status_code
@@ -132,8 +138,10 @@ class _host(object):
         resp = self.infoblox_.put(self._ref, payload)
         if resp.status_code != 200:
             try:
-                return self.infoblox_.__caller__('Error updating host record {0} - Status: {1}'\
-                                                 .format(self.hostname, resp.status_code),
+                return self.infoblox_.__caller__('Error updating host record '
+                                                 '{0} - Status: {1}'
+                                                 .format(self.hostname,
+                                                         resp.status_code),
                                                  resp.status_code)
             except Exception:
                 return resp.status_code
@@ -169,15 +177,15 @@ class _host(object):
             input   void (void)
             output  aliases (list)      list of infoblox aliases
             """
-            resp = self.infoblox_.get('record:host?_return_fields%2B=aliases&name={0}'\
-                                      .format(self.host_.hostname))
+            resp = self.infoblox_.get(
+                'record:host?_return_fields%2B=aliases&name={0}'.format(
+                    self.host_.hostname))
             if resp.status_code != 200:
                 try:
-                    return self.infoblox_.__caller__('Could not retrieve aliases for {0}'\
-                                                     '- Status {1}'\
-                                                     .format(self.host_.hostname,
-                                                             resp.status_code),
-                                                     resp.status_code)
+                    return self.infoblox_.__caller__(
+                        'Could not retrieve aliases for {0} - Status {1}'
+                        .format(self.host_.hostname, resp.status_code),
+                        resp.status_code)
                 except Exception:
                     return resp.status_code
             try:
@@ -202,8 +210,9 @@ class _host(object):
             if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__(
-                        'Could not set aliases for {0} - Status {1}'\
-                        .format(self.host_.hostname, resp.status_code), resp.status_code)
+                        'Could not set aliases for {0} - Status {1}'
+                        .format(self.host_.hostname, resp.status_code),
+                        resp.status_code)
                 except Exception:
                     return resp.status_code
             return 0
@@ -226,8 +235,9 @@ class _host(object):
             if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__(
-                        'Could not unset aliases for {0} - Status {1}'\
-                        .format(self.host_.hostname, resp.status_code), resp.status_code)
+                        'Could not unset aliases for {0} - Status {1}'
+                        .format(self.host_.hostname, resp.status_code),
+                        resp.status_code)
                 except Exception:
                     return resp.status_code
             return 0
