@@ -41,7 +41,7 @@ class _rpz_cname(object):
                     'Could not retrieve CNAME _ref for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
-                return resp
+                return resp.status_code
         try:
             return json.loads(resp.text)[0]
 
@@ -59,10 +59,6 @@ class _rpz_cname(object):
                 view (string)           Optional: The view where the record is
         output  0 (int)                 Success
         """
-        # pass
-        # TODO: Build payload
-        # TODO: Make _POST request
-        # TODO: Check status code and return/error out
         payload = '{"name":"%s", "canonical":"%s", "rp_zone":"%s"' % (self.name+'.'+rp_zone, canonical, rp_zone)
         if comment is not None:
             payload += ', "comment":"%s"' % (comment)
@@ -76,11 +72,9 @@ class _rpz_cname(object):
         resp = self.infoblox_.post('record:rpz:cname', payload)
 
         if resp.status_code != 201:
-            print(resp.json())
-            print(resp.status_code)
             try:
                 return self.infoblox_.__caller__(
-                    'Could not create CNAME record for {0} - Status {1}'\
+                    'Could not create CNAME record for {0} - Status {1}'
                     .format(self.name, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
