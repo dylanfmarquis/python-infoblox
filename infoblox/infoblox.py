@@ -19,7 +19,7 @@
     SOFTWARE.
 """
 __version__ = '0.3'
-__author__ = 'Dylan F Marquis'
+__author__ = 'Dylan F. Marquis'
 
 
 import requests
