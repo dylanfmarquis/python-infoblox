@@ -1,22 +1,22 @@
 """
-    python-infoblox - Infoblox WAPI module
-    Copyright (C) 2016 Dylan F. Marquis
+python-infoblox - Infoblox WAPI module
+Copyright (C) 2016 Dylan F. Marquis
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """
 __version__ = '0.3'
 __author__ = 'Dylan F. Marquis'
@@ -40,8 +40,10 @@ class infoblox(object):
 
         input   error (string)      Error description to provide to callback
                 errno (int)         Status code of API call
-        output  callback (funct)    Calls callback function and passes error string
-                errno (int)         Status code of API call (if no callback is specified)
+        output  callback (funct)    Calls callback function and passes
+                                    error string
+                errno (int)         Status code of API call (if no callback
+                                    is specified)
         """
         if self.callback is not None:
             return self.callback(error)
@@ -51,8 +53,9 @@ class infoblox(object):
         """
         class constructor - Automatically called on class instantiation
 
-        input   callback (funct)    An optional callback can be passed at instantiation for error
-                                    and logging purposes
+        input   callback (funct)    An optional callback can be passed at
+                                    instantiation for error and logging
+                                    purposes
         output  void (void)
         """
         self.callback = callback
@@ -63,7 +66,8 @@ class infoblox(object):
 
     def __del__(self):
         """
-        class destructor - Invalidates the cookie on Infoblox side to effectively logout the user
+        class destructor - Invalidates the cookie on Infoblox side to
+                           effectively logout the user
         input   void (void)
         output  void (void)
         """
@@ -76,7 +80,8 @@ class infoblox(object):
         input   void (void)
         output  ret (list)  elements
                                 0 - Infoblox WAPI URL
-                                1 - Base64 encoded Infoblox username and password
+                                1 - Base64 encoded Infoblox username
+                                    and password
         """
         while(1):
             if auth.get('url'):
@@ -94,9 +99,10 @@ class infoblox(object):
             creds = base64.b64encode('{0}:{1}'.format(user, passwd))
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                resp = requests.get('https://{0}/wapi/{1}/record:host?name~={0}'\
+                resp = requests.get('https://{0}/wapi/{1}/record:host?name~={0}'
                                     .format(url, self.vers),
-                                    headers={'Authorization': 'Basic {0}'.format(creds),
+                                    headers={'Authorization': 'Basic {0}'
+                                                              .format(creds),
                                              'Accept': 'application/xml'},
                                     verify=False)
                 if resp.status_code == 200:
@@ -111,14 +117,16 @@ class infoblox(object):
         """
         get - Send GET request to Infoblox WAPI
 
-        input   query (string)  Directory location of API call - path after /api/ in URL
+        input   query (string)  Directory location of API call - path after
+                                /api/ in URL
         output  resp (struct)   API HTTP response, including status code
         """
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            return requests.get('https://{0}/wapi/{1}/{2}'\
+            return requests.get('https://{0}/wapi/{1}/{2}'
                                 .format(self.url, self.vers, query),
-                                headers={'Authorization': 'Basic {0}'.format(self.creds),
+                                headers={'Authorization': 'Basic {0}'
+                                                          .format(self.creds),
                                          'Accept': 'application/json'},
                                 verify=False)
 
@@ -128,14 +136,18 @@ class infoblox(object):
 
         input   api_function (string)   Function to call in WAPI
                 payload (string)        Payload for the POST request
-        output  resp (struct)           WAPI HTTP response, including status code
+        output  resp (struct)           WAPI HTTP response, including
+                                        status code
         """
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            return requests.post('https://{0}/wapi/{1}/{2}'\
+            return requests.post('https://{0}/wapi/{1}/{2}'
                                  .format(self.url, self.vers, api_function),
-                                 data=payload, headers={'Authorization': 'Basic {0}'\
-                                .format(self.creds)},
+                                 data=payload,
+                                 headers={
+                                          'Authorization': 'Basic {0}'
+                                                           .format(self.creds)
+                                         },
                                  verify=False)
 
     def put(self, api_function, payload):
@@ -144,14 +156,16 @@ class infoblox(object):
 
         input   api_function (string)   Function to call in WAPI
                 payload (string)        Payload for the PUT request
-        output  resp (struct)           WAPI HTTP response, including status code
+        output  resp (struct)           WAPI HTTP response, including
+                                        status code
         """
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            return requests.put('https://{0}/wapi/{1}/{2}'\
+            return requests.put('https://{0}/wapi/{1}/{2}'
                                 .format(self.url, self.vers, api_function),
-                                data=payload, headers={'Authorization': 'Basic {0}'\
-                                .format(self.creds)},
+                                data=payload,
+                                headers={'Authorization': 'Basic {0}'
+                                                          .format(self.creds)},
                                 verify=False)
 
     def delete(self, api_function):
@@ -159,13 +173,17 @@ class infoblox(object):
         delete - Send DELETE request to Infoblox WAPI
 
         input   api_function (string)   Function to call in WAPI
-        output  resp (struct)           WAPI HTTP response, including status code
+        output  resp (struct)           WAPI HTTP response, including
+                                        status code
         """
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            return requests.delete('https://{0}/wapi/{1}/{2}'\
+            return requests.delete('https://{0}/wapi/{1}/{2}'
                                    .format(self.url, self.vers, api_function),
-                                   headers={'Authorization': 'Basic {0}'.format(self.creds)},
+                                   headers={
+                                            'Authorization': 'Basic {0}'
+                                                             .format(self.creds)
+                                           },
                                    verify=False)
 
     def host(self, hostname=None):
