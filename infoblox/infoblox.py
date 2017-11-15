@@ -18,17 +18,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-__version__ = '0.3'
-__author__ = 'Dylan F. Marquis'
-
 
 import requests
 import base64
 import getpass
 import warnings
+import sys
+# For input purposes
+from builtins import input, bytes
 
-from _internal import (_a, _cname, _grid, _host, _lease, _mx, _srv, _subnet,
-                       _rpz_cname)
+try:
+    from infoblox import _internal
+except ImportError:
+    import _internal
+
+__version__ = '0.3'
+__author__ = 'Dylan F. Marquis'
 
 
 # Infoblox Network Management
@@ -87,16 +92,18 @@ class infoblox(object):
             if auth.get('url'):
                 url = auth['url']
             else:
-                url = raw_input('Infoblox URL: ')
+                url = input('Infoblox URL: ')
             if auth.get('user'):
                 user = auth['user']
             else:
-                user = raw_input('Infoblox Username: ')
+                user = input('Infoblox Username: ')
             if auth.get('passwd'):
                 passwd = auth['passwd']
             else:
                 passwd = getpass.getpass()
-            creds = base64.b64encode('{0}:{1}'.format(user, passwd))
+            creds = (base64.b64encode(
+                        bytes('{0}:{1}'.format(user, passwd), "utf-8"))
+                     .decode("utf-8"))
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 resp = requests.get('https://{0}/wapi/{1}/record:host?name~={0}'
@@ -193,7 +200,7 @@ class infoblox(object):
         input   hostname (string)   DNS name for host record
         output  handle (handle)     Reference to host object
         """
-        handle = _host(self, hostname)
+        handle = _internal._host(self, hostname)
         return handle
 
     def grid(self):
@@ -203,7 +210,7 @@ class infoblox(object):
         input   void (void)
         output  handle (handle)     Reference to grid object
         """
-        handle = _grid(self)
+        handle = _internal._grid(self)
         return handle
 
     def subnet(self, subnet=None):
@@ -213,7 +220,7 @@ class infoblox(object):
         input   subnet (string)     Specified subnet
         output  handle (handle)     Reference to subnet object
         """
-        handle = _subnet(self, subnet)
+        handle = _internal._subnet(self, subnet)
         return handle
 
     def lease(self, address):
@@ -223,7 +230,7 @@ class infoblox(object):
         input   address (string)    IP address of lease
         output  handle (handle)     Reference to lease object
         """
-        handle = _lease(self, address)
+        handle = _internal._lease(self, address)
         return handle
 
     def a(self, name):
@@ -233,7 +240,7 @@ class infoblox(object):
         input   name (string)       DNS name of an A record
         output  handle (handle)     Reference to A record object
         """
-        handle = _a(self, name)
+        handle = _internal._a(self, name)
         return handle
 
     def cname(self, name):
@@ -243,7 +250,7 @@ class infoblox(object):
         input   name (string)       Domain name of CNAME
         output  handle (handle)     Reference to CNAME object
         """
-        handle = _cname(self, name)
+        handle = _internal._cname(self, name)
         return handle
 
     def mx(self, name):
@@ -253,7 +260,7 @@ class infoblox(object):
         input   name (string)       Domain name of MX record
         output  handle (handle)     Reference to record:mx object
         """
-        handle = _mx(self, name)
+        handle = _internal._mx(self, name)
         return handle
 
     def srv(self, name, port):
@@ -264,7 +271,7 @@ class infoblox(object):
                 port (int)          Port number of service
         output  handle (handle)     Reference to SRV record object
         """
-        handle = _srv(self, name, port)
+        handle = _internal._srv(self, name, port)
         return handle
 
     def rpz_cname(self, name):
@@ -274,4 +281,4 @@ class infoblox(object):
         input   name (string)       Domain name of the record
         output  handle (handle)     Reference to record:rpz:cname object
         """
-        return _rpz_cname(self, name)
+        return _internal._rpz_cname(self, name)

@@ -1,7 +1,7 @@
 import re
 import unittest
 
-from infoblox import infoblox
+import infoblox
 
 
 class InfobloxTest(unittest.TestCase):
@@ -13,7 +13,7 @@ class InfobloxTest(unittest.TestCase):
             log.write('{0}\n'.format(error))
             log.close()
 
-        cls.iblox = infoblox(callback=_callback)
+        cls.iblox = infoblox.infoblox(callback=_callback)
         cls.TEST_IP = '10.4.19.232'
         cls.TEST_IP_1 = '10.4.19.233'
         cls.TEST_SUBNET = '10.4.19.0/24'
