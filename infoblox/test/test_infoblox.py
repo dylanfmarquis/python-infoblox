@@ -1,6 +1,5 @@
 import re
 import unittest
-
 import infoblox
 
 
@@ -22,6 +21,10 @@ class InfobloxTest(unittest.TestCase):
         cls.TEST_CNAME = 'python-infoblox2.example.com'
         cls.TEST_MAC = 'aa:bb:cc:dd:ee:ff'
         cls.TEST_SRV = '_pytest._tcp.example.com'
+
+    @classmethod
+    def tearDownClass(cls):
+        del(cls.iblox)
 
     def test_host(self):
         # Test host add
