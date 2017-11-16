@@ -23,7 +23,6 @@ import requests
 import base64
 import getpass
 import warnings
-import sys
 # For input purposes
 from builtins import input, bytes
 

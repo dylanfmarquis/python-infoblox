@@ -18,11 +18,11 @@ Initialization
 ```python
 
 from infoblox import *
-#Auth with cmd prompt
-iblox = infoblox()
+#Auth with cmd prompt, specifying the specific version
+iblox = infoblox(vers='v2.6.1')
 
 #Specify Credentials
-iblox = infoblox(auth={'url':'infoblox.example.com','user':'myuser','passwd':'Secret123'})
+iblox = infoblox(auth={'url':'infoblox.example.com','user':'myuser','passwd':'Secret123'}, vers='v2.6.1')
 
 #Partial credentials can be specified as well
 iblox = infoblox(auth={'url':'infoblox.example.com'})
