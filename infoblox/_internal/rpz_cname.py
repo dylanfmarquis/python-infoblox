@@ -59,15 +59,16 @@ class _rpz_cname(object):
                 view (string)           Optional: The view where the record is
         output  0 (int)                 Success
         """
-        payload = '{"name":"%s", "canonical":"%s", "rp_zone":"%s"' % (self.name+'.'+rp_zone, canonical, rp_zone)
-        if comment is not None:
-            payload += ', "comment":"%s"' % (comment)
-        if ttl is not None:
-            payload += ', "ttl":%s' % (ttl)
-        if view is not None:
-            payload += ', "view":"%s"' % (view)
-
-        payload += '}'
+        kwargs = {
+                  "name": self.name + '.' + rp_zone,
+                  "canonical": canonical,
+                  "rp_zone": rp_zone,
+                  "comment": comment,
+                  "ttl": ttl,
+                  "view": view
+                 }
+        d = {key: kwargs[key] for key in kwargs if kwargs[key]}
+        payload = json.dumps(d)
 
         resp = self.infoblox_.post('record:rpz:cname', payload)
 
