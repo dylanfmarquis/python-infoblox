@@ -13,7 +13,7 @@ class _a(object):
         """
         self.infoblox_ = infoblox_
         self.name = name
-        self._ref = self._ref()
+        self._ref_ = self._ref()
 
     def _ref(self):
         """
@@ -78,7 +78,7 @@ class _a(object):
         input   void (void)
         output  0 (int)                 Success
         """
-        resp = self.infoblox_.delete(self._ref)
+        resp = self.infoblox_.delete(self._ref_)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
@@ -100,7 +100,7 @@ class _a(object):
             payload = '{{"ipv4addr":"{0}"}}'.format(ip)
         if ttl is not None:
             payload = '{{"ttl":{0}}}'.format(ttl)
-        resp = self.infoblox_.put(self._ref, payload)
+        resp = self.infoblox_.put(self._ref_, payload)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(

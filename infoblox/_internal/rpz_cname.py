@@ -13,10 +13,10 @@ class _rpz_cname(object):
         """
         self.infoblox_ = infoblox_
         self.name = name
-        self._ref = self.__ref()
+        self._ref_ = self._ref()
         self.zone = None
 
-    def __ref(self):
+    def _ref(self):
         """
         _ref - Get _ref for a specified CNAME record
 
@@ -83,7 +83,7 @@ class _rpz_cname(object):
 
         # If we added successfully, set the zone
         self.zone = rp_zone
-        self._ref = self.__ref()
+        self._ref_ = self._ref()
 
         return 0
 
@@ -94,7 +94,7 @@ class _rpz_cname(object):
         input   void (void)
         output  0 (int)                 Success
         """
-        resp = self.infoblox_.delete(self._ref)
+        resp = self.infoblox_.delete(self._ref_)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
@@ -130,7 +130,7 @@ class _rpz_cname(object):
         d = {key: kwargs[key] for key in kwargs if kwargs[key]}
         payload = json.dumps(d)
 
-        resp = self.infoblox_.put(self._ref, payload)
+        resp = self.infoblox_.put(self._ref_, payload)
 
         if resp.status_code != 200:
             try:

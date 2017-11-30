@@ -13,7 +13,7 @@ class _cname(object):
         """
         self.infoblox_ = infoblox_
         self.name = name
-        self._ref = self._ref()
+        self._ref_ = self._ref()
 
     def _ref(self):
         """
@@ -80,7 +80,7 @@ class _cname(object):
         input   void (void)
         output  0 (int)                 Success
         """
-        resp = self.infoblox_.delete(self._ref)
+        resp = self.infoblox_.delete(self._ref_)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
@@ -102,7 +102,7 @@ class _cname(object):
             payload = '{{"canonical":"{0}"}}'.format(canonical)
         if ttl is not None:
             payload = '{{"ttl":{0}}}'.format(ttl)
-        resp = self.infoblox_.put(self._ref, payload)
+        resp = self.infoblox_.put(self._ref_, payload)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(

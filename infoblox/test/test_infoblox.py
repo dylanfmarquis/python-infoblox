@@ -104,7 +104,6 @@ class InfobloxTest(unittest.TestCase):
         # Cleanup
         self.iblox.host(config.TEST_HOST_RECORD_1).delete()
         self.iblox.host(config.TEST_HOST_RECORD).delete()
-        self.iblox.grid().restart()
 
     def test_srv(self):
         # Preparation for calls
@@ -132,7 +131,6 @@ class InfobloxTest(unittest.TestCase):
         # Cleanup
         self.iblox.host(config.TEST_HOST_RECORD).delete()
         self.iblox.host(config.TEST_HOST_RECORD_1).delete()
-        self.iblox.grid().restart()
 
     def test_grid_restart(self):
         self.assertTrue(self.iblox.grid().restart() == 0)

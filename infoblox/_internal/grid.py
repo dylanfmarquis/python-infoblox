@@ -11,7 +11,7 @@ class _grid(object):
         output  void (void)
         """
         self.infoblox_ = infoblox_
-        self._ref = self._ref()
+        self._ref_ = self._ref()
 
     def _ref(self):
         """
@@ -44,7 +44,7 @@ class _grid(object):
         resp = self.infoblox_.post('{0}?_function=restartservices&member_order=SEQUENTIALLY'
                                    '&sequential_delay=10&service_option=ALL'
                                    '&restart_option=RESTART_IF_NEEDED'
-                                   .format(self._ref), '')
+                                   .format(self._ref_), '')
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(

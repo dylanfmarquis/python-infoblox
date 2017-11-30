@@ -15,7 +15,7 @@ class _host(object):
         self.infoblox_ = infoblox_
         if hostname is not None:
             self.hostname = hostname
-            self._ref = self._ref()
+            self._ref_ = self._ref()
 
     def _ref(self):
         """
@@ -88,7 +88,7 @@ class _host(object):
         output  0 (int)             Successful creation
                 errno (int)         Error code of API call
         """
-        resp = self.infoblox_.delete(self._ref)
+        resp = self.infoblox_.delete(self._ref_)
         if resp.status_code != 201:
             try:
                 return self.infoblox_.__caller__('Error creating host record '
@@ -110,7 +110,7 @@ class _host(object):
         """
         if ttl is not None:
             payload = '{{"ttl": {0}}}'.format(ttl)
-            resp = self.infoblox_.put(self._ref, payload)
+            resp = self.infoblox_.put(self._ref_, payload)
             if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__('Error updating host '
@@ -135,7 +135,7 @@ class _host(object):
                     .format(self.fetch()['ipv4addrs'][0]['ipv4addr'], mac)
         if mac is not None and ip is not None:
             payload = '{{"ipv4addrs":[{{"ipv4addr":"{0}","mac":"{1}"}}]}}'.format(ip, mac)
-        resp = self.infoblox_.put(self._ref, payload)
+        resp = self.infoblox_.put(self._ref_, payload)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__('Error updating host record '
@@ -206,7 +206,7 @@ class _host(object):
                 str_alias += ('"{0}",'.format(alias))
             str_alias += '"{0}"'.format(str(new_alias))
             payload = '{{"aliases":[{0}]}}'.format(str_alias)
-            resp = self.infoblox_.put('{0}'.format(self.host_._ref), payload)
+            resp = self.infoblox_.put('{0}'.format(self.host_._ref_), payload)
             if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__(
@@ -231,7 +231,7 @@ class _host(object):
                     str_alias += ('"{0}",'.format(alias))
             str_alias = str_alias[:-1]
             payload = '{{"aliases":[{0}]}}'.format(str_alias)
-            resp = self.infoblox_.put('{0}'.format(self.host_._ref), payload)
+            resp = self.infoblox_.put('{0}'.format(self.host_._ref_), payload)
             if resp.status_code != 200:
                 try:
                     return self.infoblox_.__caller__(

@@ -17,7 +17,7 @@ class _subnet(object):
             self.subnet = self.prompt()[0]
         else:
             self.subnet = subnet
-        self._ref = self._ref()
+        self._ref_ = self._ref()
 
     def _ref(self):
         """
@@ -51,7 +51,7 @@ class _subnet(object):
         payload = '{{"num":{0}}}'.format(offset)
         resp = self.infoblox_.post(
                     '{0}?_function=next_available_ip'
-                    .format(self._ref), payload)
+                    .format(self._ref_), payload)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(

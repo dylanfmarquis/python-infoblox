@@ -14,7 +14,7 @@ class _srv(object):
         self.infoblox_ = infoblox_
         self.name = name
         self.port = port
-        self._ref = self._ref()
+        self._ref_ = self._ref()
 
     def _ref(self):
         """
@@ -79,7 +79,7 @@ class _srv(object):
         output  0 (int)             Successful deletion
                 errno (int)         Error code of API call
         """
-        resp = self.infoblox_.delete(self._ref)
+        resp = self.infoblox_.delete(self._ref_)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__('Error deleting SRV record '
@@ -108,7 +108,7 @@ class _srv(object):
         payload = '{{"target": "{0}", "weight": {1}, "name": "{2}", "priority": {3}'\
                   ',"port": {4}}}'\
                   .format(target, weight, self.name, priority, self.port)
-        resp = self.infoblox_.put(self._ref, payload)
+        resp = self.infoblox_.put(self._ref_, payload)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__('Error updating srv record '
