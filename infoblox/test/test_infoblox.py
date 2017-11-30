@@ -1,11 +1,7 @@
 import re
 import unittest
 import infoblox
-
-try:
-    from . import config
-except ValueError:
-    import config
+import infoblox.test.config as config
 
 
 class InfobloxTest(unittest.TestCase):
