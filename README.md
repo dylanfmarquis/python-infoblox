@@ -139,10 +139,30 @@ srv.update(weight=1, priority=1)
 #Delete a SRV record
 srv.delete()
 ```
+Record:RPZ:CNAME
+----
+```python
+# Create a CNAME object to direct python-infoblox.example.com to other.example.com
+cname = iblox.rpz_cname("python-infoblox.example.com")
+cname.add("other.example.com",
+          "zone.example.local",
+          comment="This is a comment",
+          view="default')
+
+# Update the canonical name to be yetanother.example.com
+cname.update(canonical="yetanother.example.com")
+
+# Update the comment
+cname.update(comment="Updated comment")
+
+# Delete
+cname.delete()
+```
 Unittests
 ----
-To run the unittests, simply run the following command from inside the repository.
+To run the unittests, first, copy `infoblox/test/sample.config.py` to `infoblox/test/config.py`.
+Then, modify the values to work for your organization.
+Then, simply run the following command from inside the repository.
 ```bash
 python -m unittest discover
 ```
-Please note that the IP addresses and URLs are what work for us, but you should verify that they will not cause any problems for you before running the unittests.
