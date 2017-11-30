@@ -167,6 +167,10 @@ class InfobloxTest(unittest.TestCase):
 
         self.assertTrue(cname.delete() == 0)
 
+    def test_mx(self):
+        mx = self.iblox.mx(config.TEST_MX)
+        self.assertTrue(mx.mail_exchanger == config.TEST_MX)
+
 
 if __name__ == "__main__":
     unittest.main()
