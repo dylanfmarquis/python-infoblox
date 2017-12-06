@@ -13,6 +13,19 @@ class _mx(object):
         """
         self.infoblox_ = infoblox_
         self.mail_exchanger = mail_exchanger
+        self._ref_ = self._ref()
+
+    def _ref(self):
+        """
+        _ref - Get _ref for a specified CNAME record
+
+        input   void (void)
+        output  host _ref               _ref ID for CNAME record
+        """
+        try:
+            return self.fetch()['_ref']
+        except Exception:
+            return None
 
     def fetch(self):
         """
