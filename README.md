@@ -9,19 +9,20 @@ requests - http://python-requests.org
 Setup
 ----
 ```bash
-mv ./python-infoblox ./infoblox
-export PYTHONPATH=$PYTHONPATH:/home/foo/infoblox
+git clone https://github.com/dylanfmarquis/python-infoblox.git
+cd python-infoblox
+pip install .
 ```
 Initialization
 ----
 ```python
 
 from infoblox import *
-#Auth with cmd prompt
-iblox = infoblox()
+#Auth with cmd prompt, specifying the specific version
+iblox = infoblox(vers='v2.6.1')
 
 #Specify Credentials
-iblox = infoblox(auth={'url':'infoblox.example.com','user':'myuser','passwd':'Secret123'})
+iblox = infoblox(auth={'url':'infoblox.example.com','user':'myuser','passwd':'Secret123'}, vers='v2.6.1')
 
 #Partial credentials can be specified as well
 iblox = infoblox(auth={'url':'infoblox.example.com'})
@@ -36,7 +37,7 @@ def callback(error):
 
 iblox = infoblox(callback=callback)
 ```
-Host Record 
+Host Record
 ----
 ```python
 #Create a host record
@@ -137,4 +138,31 @@ srv.update(weight=1, priority=1)
 
 #Delete a SRV record
 srv.delete()
+```
+Record:RPZ:CNAME
+----
+```python
+# Create a CNAME object to direct python-infoblox.example.com to other.example.com
+cname = iblox.rpz_cname("python-infoblox.example.com")
+cname.add("other.example.com",
+          "zone.example.local",
+          comment="This is a comment",
+          view="default')
+
+# Update the canonical name to be yetanother.example.com
+cname.update(canonical="yetanother.example.com")
+
+# Update the comment
+cname.update(comment="Updated comment")
+
+# Delete
+cname.delete()
+```
+Unittests
+----
+To run the unittests, first, copy `infoblox/test/sample.config.py` to `infoblox/test/config.py`.
+Then, modify the values to work for your organization.
+Then, simply run the following command from inside the repository.
+```bash
+python -m unittest discover
 ```
