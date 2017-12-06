@@ -58,8 +58,10 @@ class InfobloxTest(unittest.TestCase):
 
     def test_lease_query(self):
         d = 'discovered_data'
-        self.assertTrue(isinstance(self.iblox.lease(config.TEST_IP).fetch(d),
-                                   list))
+        lease = self.iblox.lease(config.TEST_DHCP_LEASE_IP)
+        self.assertTrue(isinstance(lease.fetch(d), list))
+        net = lease.fetch("network")
+        self.assertTrue(net[0]['network'] == config.TEST_DHCP_LEASE_SUBNET)
 
     def test_a(self):
         # Test a add
