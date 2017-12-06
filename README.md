@@ -9,9 +9,7 @@ requests - http://python-requests.org
 Setup
 ----
 ```bash
-git clone https://github.com/dylanfmarquis/python-infoblox.git
-cd python-infoblox
-pip install .
+pip install python-infoblox
 ```
 Initialization
 ----

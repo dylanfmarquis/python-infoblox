@@ -31,9 +31,9 @@ try:
 except ImportError:
     import _internal
 
-__version__ = '0.3'
-__author__ = 'Dylan F. Marquis'
-
+__version__ = '0.4'
+__author__  = "Dylan F. Marquis"
+__author__  = "Drew Monroe"
 
 # Infoblox Network Management
 class infoblox(object):
