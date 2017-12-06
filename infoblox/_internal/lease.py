@@ -23,7 +23,7 @@ class _lease(object):
         output  resp (parsed json)      Parsed JSON response
         """
         resp = self.infoblox_.get(
-            'lease?address<={0}&_return_fields={1}'.format(self.address,
+            'lease?address~={0}&_return_fields={1}'.format(self.address,
                                                            return_fields))
         if resp.status_code != 200:
             try:
