@@ -17,7 +17,20 @@ class _subnet(object):
             self.subnet = self.prompt()[0]
         else:
             self.subnet = subnet
-        self._ref_ = self._ref()
+
+        data = self._get()
+        if type(data) is int:
+            self.infoblox_.__caller__(
+                "Infoblox error code {0}".format(str(data)))
+            raise Exception("Infoblox error code {0}".format(str(data)))
+        self._ref_ = data['_ref']
+        self.comment = data['comment']
+
+    def __str__(self):
+        return "{0} - {1}".format(self.subnet, self.comment)
+
+    def __repr__(self):
+        return self.__str__()
 
     def _ref(self):
         """
@@ -26,6 +39,10 @@ class _subnet(object):
         input   void (void)
         output  subnet_ref (string)     _ref ID for a subnet
         """
+        d = self._get()
+        return d if type(d) is int else d['_ref']
+
+    def _get(self):
         resp = self.infoblox_.get('network?network={0}'.format(self.subnet))
         if resp.status_code != 200:
             try:
@@ -34,7 +51,7 @@ class _subnet(object):
                     .format(self.subnet, resp.status_code), resp.status_code)
             except Exception:
                 return resp.status_code
-        return json.loads(resp.text)[0]['_ref']
+        return resp.json()[0]
 
     def next_available_ip(self, offset=2):
         """

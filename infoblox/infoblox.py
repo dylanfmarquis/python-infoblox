@@ -35,6 +35,7 @@ __version__ = '0.4'
 __author__  = "Dylan F. Marquis"
 __author__  = "Drew Monroe"
 
+
 # Infoblox Network Management
 class infoblox(object):
 
@@ -281,3 +282,27 @@ class infoblox(object):
         output  handle (handle)     Reference to record:rpz:cname object
         """
         return _internal._rpz_cname(self, name)
+
+    def subnet_from_ip(self, ip):
+        """
+        Takes an IP address as a string and returns the subnet the IP belongs
+        to
+
+        input   ip (string)         IP address to get the subnet of
+        output  subnet (Subnet)     Returns a subnet object
+        """
+        resp = self.get("network?contains_address={0}".format(ip))
+
+        if resp.status_code != 200:
+            try:
+                return self.__caller__(
+                    'Could not retrieve subnet _ref for {0} - Status {1}'
+                    .format(ip, resp.status_code), resp.status_code)
+            except Exception:
+                return resp.status_code
+        try:
+            s = resp.json()[0]['network']
+        except (ValueError, IndexError):
+            return None
+
+        return self.subnet(subnet=s)
