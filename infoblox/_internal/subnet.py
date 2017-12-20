@@ -18,7 +18,7 @@ class _subnet(object):
         else:
             self.subnet = subnet
 
-        data = self._get()
+        data = self.get()
         if type(data) is int:
             self.infoblox_.__caller__(
                 "Infoblox error code {0}".format(str(data)))
@@ -39,10 +39,10 @@ class _subnet(object):
         input   void (void)
         output  subnet_ref (string)     _ref ID for a subnet
         """
-        d = self._get()
+        d = self.get()
         return d if type(d) is int else d['_ref']
 
-    def _get(self):
+    def get(self):
         resp = self.infoblox_.get('network?network={0}'.format(self.subnet))
         if resp.status_code != 200:
             try:
