@@ -54,6 +54,8 @@ class InfobloxTest(unittest.TestCase):
                                .next_available_ip(offset=1))
         next_ip = (self.iblox.subnet(config.TEST_SUBNET)
                        .next_available_ip(offset=1) is None)
+        self.assertTrue(self.iblox.subnet_from_ip(config.TEST_IP).subnet ==
+                        config.TEST_SUBNET)
         self.assertTrue(matches or next_ip)
 
     def test_lease_query(self):
