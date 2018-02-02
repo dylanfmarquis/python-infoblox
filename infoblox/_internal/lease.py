@@ -27,7 +27,7 @@ class _lease(object):
         except Exception:
             return None
 
-    def fetch(self, return_fields):
+    def fetch(self, **return_fields):
         """
         fetch - Fetch specified fields of a lease object
 
@@ -35,9 +35,11 @@ class _lease(object):
                                         a lease
         output  resp (parsed json)      Parsed JSON response
         """
-        resp = self.infoblox_.get(
-            'lease?address~={0}&_return_fields={1}'.format(self.address,
-                                                           return_fields))
+        return_query = ','.join([k for k in return_fields.keys()])
+        query = "lease?address=~-{0}".format(self.address)
+        if return_query:
+            query += '&' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
