@@ -36,9 +36,9 @@ class _lease(object):
         output  resp (parsed json)      Parsed JSON response
         """
         return_query = ','.join([k for k in return_fields.keys()])
-        query = "lease?address=~-{0}".format(self.address)
+        query = "lease?address~={0}".format(self.address)
         if return_query:
-            query += '&' + return_query
+            query += '&_return_fields=' + return_query
         resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
