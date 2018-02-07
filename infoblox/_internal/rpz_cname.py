@@ -28,14 +28,18 @@ class _rpz_cname(object):
         except Exception:
             return None
 
-    def fetch(self):
+    def fetch(self, **return_fields):
         """
         fetch - Retrieve all information from a specified RPZ CNAME record
 
-        input   void (void)
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)      Parsed JSON response
         """
-        resp = self.infoblox_.get('record:rpz:cname?name~={0}&_return_fields=canonical,comment,disable,name,rp_zone,ttl,view,zone'.format(self.name))
+        return_query = ','.join([k for k in return_fields.keys()])
+        query = "record:rpz:cname?name~={0}".format(self.name)
+        if return_query:
+            query += '&_return_fields=' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
@@ -119,9 +123,9 @@ class _rpz_cname(object):
         """
 
         kwargs = {
-                  "name": (name + '.' + self.zone if name is not None and
-                                                    self.zone is not None
-                                                  else None),
+                  "name": (name + '.' + self.zone
+                           if name is not None and self.zone is not None
+                           else None),
                   "canonical": canonical,
                   "comment": comment,
                   "ttl": ttl,

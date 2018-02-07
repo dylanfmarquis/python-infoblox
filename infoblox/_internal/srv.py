@@ -28,14 +28,18 @@ class _srv(object):
         except Exception:
             return None
 
-    def fetch(self):
+    def fetch(self, **return_fields):
         """
         fetch - Retrieve all information from a specified SRV record
 
-        input   void (void)
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)      Parsed JSON response
         """
-        resp = self.infoblox_.get('record:srv?name~={0}'.format(self.name))
+        return_query = ','.join([k for k in return_fields.keys()])
+        query = "record:srv?name~={0}".format(self.name)
+        if return_query:
+            query += '&_return_fields=' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(

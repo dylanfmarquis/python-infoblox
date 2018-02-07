@@ -31,8 +31,7 @@ class _lease(object):
         """
         fetch - Fetch specified fields of a lease object
 
-        input   return_fields (string)  Fields desired for a query against
-                                        a lease
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)      Parsed JSON response
         """
         return_query = ','.join([k for k in return_fields.keys()])

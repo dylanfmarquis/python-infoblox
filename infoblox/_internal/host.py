@@ -29,14 +29,18 @@ class _host(object):
         except Exception:
             return None
 
-    def fetch(self):
+    def fetch(self, **return_fields):
         """
         fetch - Retrieve all information from a specified host record
 
-        input   void (void)
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)  Parsed JSON response
         """
-        resp = self.infoblox_.get('record:host?name~={0}'.format(self.hostname))
+        return_query = ','.join([k for k in return_fields.keys()])
+        query = "record:host?name~={0}".format(self.hostname)
+        if return_query:
+            query += '&_return_fields=' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__('Could not retrieve host _ref'

@@ -57,10 +57,9 @@ class InfobloxTest(unittest.TestCase):
         self.assertTrue(matches or next_ip)
 
     def test_lease_query(self):
-        d = 'discovered_data'
         lease = self.iblox.lease(config.TEST_DHCP_LEASE_IP)
-        self.assertTrue(isinstance(lease.fetch(d), list))
-        net = lease.fetch("network")
+        self.assertTrue(isinstance(lease.fetch(discovered_data=True), list))
+        net = lease.fetch(network=True)
         self.assertTrue(net[0]['network'] == config.TEST_DHCP_LEASE_SUBNET)
 
     def test_a(self):
@@ -145,7 +144,7 @@ class InfobloxTest(unittest.TestCase):
                                   comment="python-infoblox unittest",
                                   view=config.TEST_RPZ_VIEW) == 0)
         # Check to make sure everything was added properly
-        j = cname.fetch()
+        j = cname.fetch(view=True, name=True, canonical=True, comment=True)
         self.assertTrue(j['view'] == config.TEST_RPZ_VIEW)
         self.assertTrue(j['name'] ==
                         config.TEST_RPZ_CNAME + '.' + config.TEST_RP_ZONE)
@@ -156,7 +155,7 @@ class InfobloxTest(unittest.TestCase):
         self.assertTrue(cname.update(name=config.TEST_RPZ_CNAME,
                                      canonical=config.TEST_RPZ_CANONICAL_1,
                                      comment="python-infoblox unittest2") == 0)
-        j = cname.fetch()
+        j = cname.fetch(view=True, name=True, canonical=True, comment=True)
         self.assertTrue(j['view'] == config.TEST_RPZ_VIEW)
         self.assertTrue(j['name'] ==
                         config.TEST_RPZ_CNAME + '.' + config.TEST_RP_ZONE)

@@ -19,14 +19,18 @@ class _subnet(object):
             self.subnet = subnet
         self._ref_ = self._ref()
 
-    def _ref(self):
+    def _ref(self, **return_fields):
         """
         _ref - Get _ref for a specified subnet
 
-        input   void (void)
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  subnet_ref (string)     _ref ID for a subnet
         """
-        resp = self.infoblox_.get('network?network={0}'.format(self.subnet))
+        return_query = ','.join([k for k in return_fields.keys()])
+        query = "network?network={0}".format(self.subnet)
+        if return_query:
+            query += '&_return_fields=' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
