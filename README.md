@@ -77,7 +77,7 @@ Lease
 ----
 ```python
 #Query discovered data for a lease
-print iblox.lease('10.1.1.14').fetch('discovered_data')
+print iblox.lease('10.1.1.14').fetch(discovered_data=True)
 ```
 A Record
 ----
@@ -87,7 +87,7 @@ a = iblox.a('foo.example.com')
 a.add('10.1.1.12')
 
 #Query information on a specified A record
-print a.fetch()
+print a.fetch(dns_name=True, ipv4addr=True)
 
 #Update IP/MAC
 a.update(ip='10.1.1.13')
