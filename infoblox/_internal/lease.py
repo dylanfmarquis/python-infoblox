@@ -1,3 +1,9 @@
+"""
+A warapper around lease objects. This allows for the modification of DHCP
+leases.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/lease.html
+"""
 import json
 
 
@@ -27,17 +33,19 @@ class _lease(object):
         except Exception:
             return None
 
-    def fetch(self, return_fields):
+    def fetch(self, **return_fields):
         """
         fetch - Fetch specified fields of a lease object
 
-        input   return_fields (string)  Fields desired for a query against
-                                        a lease
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)      Parsed JSON response
         """
-        resp = self.infoblox_.get(
-            'lease?address~={0}&_return_fields={1}'.format(self.address,
-                                                           return_fields))
+        return_query = ','.join([k for k in return_fields.keys()
+                                 if return_fields[k]])
+        query = "lease?address~={0}".format(self.address)
+        if return_query:
+            query += '&_return_fields=' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(

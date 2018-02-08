@@ -1,3 +1,8 @@
+"""
+A warapper around grid objects.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/grid.html
+"""
 import json
 
 

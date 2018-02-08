@@ -1,3 +1,9 @@
+"""
+A warapper around DHCP Network objects. This allows for the modification of
+DHCP networks.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/network.html
+"""
 import json
 import re
 
@@ -22,7 +28,6 @@ class _subnet(object):
     def _ref(self):
         """
         _ref - Get _ref for a specified subnet
-
         input   void (void)
         output  subnet_ref (string)     _ref ID for a subnet
         """

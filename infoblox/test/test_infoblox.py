@@ -39,6 +39,14 @@ class InfobloxTest(unittest.TestCase):
         self.assertTrue(host.update(ip=config.TEST_IP,
                                     mac=config.TEST_MAC) == 0)
 
+        # Test host fetch
+        self.assertEqual(host.fetch(ttl=True)['ttl'], 500)
+        self.assertEqual(host.fetch(dns_name=True)['dns_name'],
+                         config.TEST_HOST_RECORD)
+        d = host.fetch(ttl=True, dns_name=True)
+        self.assertEqual(d['ttl'], 500)
+        self.assertEqual(d['dns_name'], config.TEST_HOST_RECORD)
+
         # Test host alias
         host = self.iblox.host(config.TEST_HOST_RECORD)
         self.assertTrue(host.alias().add(config.TEST_CNAME) == 0)
@@ -57,27 +65,33 @@ class InfobloxTest(unittest.TestCase):
         self.assertTrue(matches or next_ip)
 
     def test_lease_query(self):
-        d = 'discovered_data'
         lease = self.iblox.lease(config.TEST_DHCP_LEASE_IP)
-        self.assertTrue(isinstance(lease.fetch(d), list))
-        net = lease.fetch("network")
+        self.assertTrue(isinstance(lease.fetch(discovered_data=True), list))
+        net = lease.fetch(network=True)
         self.assertTrue(net[0]['network'] == config.TEST_DHCP_LEASE_SUBNET)
+        self.assertEqual(lease.fetch(hardware=True)[0]['hardware'],
+                         config.TEST_DHCP_LEASE_MAC)
+        d = lease.fetch(hardware=True, network=True, discovered_data=True)[0]
+        self.assertEqual(d['hardware'], config.TEST_DHCP_LEASE_MAC)
+        self.assertEqual(d['network'], config.TEST_DHCP_LEASE_SUBNET)
 
     def test_a(self):
-        # Test a add
+        # Test A add
         self.assertTrue(
             self.iblox.a(config.TEST_HOST_RECORD).add(config.TEST_IP) == 0)
 
-        # Test a update
+        # Test A update
         a = self.iblox.a(config.TEST_HOST_RECORD)
         self.assertTrue(a.update(ttl=700) == 0)
         self.assertTrue(a.update(ip=config.TEST_IP_1) == 0)
 
+        # Test A fetch
+        self.assertEqual(a.fetch(ttl=True)['ttl'], 700)
+        self.assertEqual(a.fetch(ipv4addr=True)['ipv4addr'], config.TEST_IP_1)
+
         # Test cname add
         cname = self.iblox.cname(config.TEST_CNAME)
         self.assertTrue(cname.add(config.TEST_HOST_RECORD) == 0)
-
-        # Test cname update
 
         # This call is preparation for the next calls
         self.iblox.host(config.TEST_HOST_RECORD_1).add(config.TEST_IP)
@@ -86,6 +100,11 @@ class InfobloxTest(unittest.TestCase):
         cname = self.iblox.cname(config.TEST_CNAME)
         self.assertTrue(cname.update(canonical=config.TEST_HOST_RECORD_1) == 0)
         self.assertTrue(cname.update(ttl=600) == 0)
+
+        # Test cname update
+        self.assertEqual(cname.fetch(ttl=True)['ttl'], 600)
+        self.assertEqual(cname.fetch(dns_name=True)['dns_name'],
+                         config.TEST_CNAME)
 
         # Test cname delete
         cname = self.iblox.cname(config.TEST_CNAME)
@@ -122,6 +141,14 @@ class InfobloxTest(unittest.TestCase):
         srv = self.iblox.srv(config.TEST_SRV, 5555)
         self.assertTrue(srv.update(target=config.TEST_HOST_RECORD_1) == 0)
 
+        # Test srv fetch
+        self.assertEqual(srv.fetch(target=True)['target'],
+                         config.TEST_HOST_RECORD_1)
+        self.assertEqual(srv.fetch(weight=True)['weight'], 1)
+        d = srv.fetch(weight=True, target=True)
+        self.assertEqual(d['target'], config.TEST_HOST_RECORD_1)
+        self.assertEqual(d['weight'], 1)
+
         # Test srv delete
         srv = self.iblox.srv(config.TEST_SRV, 5555)
         self.assertTrue(srv.delete() == 0)
@@ -145,7 +172,7 @@ class InfobloxTest(unittest.TestCase):
                                   comment="python-infoblox unittest",
                                   view=config.TEST_RPZ_VIEW) == 0)
         # Check to make sure everything was added properly
-        j = cname.fetch()
+        j = cname.fetch(view=True, name=True, canonical=True, comment=True)
         self.assertTrue(j['view'] == config.TEST_RPZ_VIEW)
         self.assertTrue(j['name'] ==
                         config.TEST_RPZ_CNAME + '.' + config.TEST_RP_ZONE)
@@ -156,7 +183,7 @@ class InfobloxTest(unittest.TestCase):
         self.assertTrue(cname.update(name=config.TEST_RPZ_CNAME,
                                      canonical=config.TEST_RPZ_CANONICAL_1,
                                      comment="python-infoblox unittest2") == 0)
-        j = cname.fetch()
+        j = cname.fetch(view=True, name=True, canonical=True, comment=True)
         self.assertTrue(j['view'] == config.TEST_RPZ_VIEW)
         self.assertTrue(j['name'] ==
                         config.TEST_RPZ_CNAME + '.' + config.TEST_RP_ZONE)
@@ -168,6 +195,12 @@ class InfobloxTest(unittest.TestCase):
     def test_mx(self):
         mx = self.iblox.mx(config.TEST_MX)
         self.assertTrue(mx.mail_exchanger == config.TEST_MX)
+        self.assertEqual(mx.fetch(mail_exchanger=True)['mail_exchanger'],
+                         config.TEST_MX)
+        self.assertEqual(mx.fetch(name=True)['name'], config.TEST_TLD)
+        d = mx.fetch(mail_exchanger=True, name=True)
+        self.assertEqual(d['mail_exchanger'], config.TEST_MX)
+        self.assertEqual(d['name'], config.TEST_TLD)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,9 @@
+"""
+A warapper around record:a objects. This allows for the modification of DNS
+A records.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/record.a.html
+"""
 import json
 
 
@@ -27,14 +33,19 @@ class _a(object):
         except Exception:
             return None
 
-    def fetch(self):
+    def fetch(self, **return_fields):
         """
         fetch - Retrieve all information from a specified A record
 
-        input   void (void)
+        input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)      Parsed JSON response
         """
-        resp = self.infoblox_.get('record:a?name~={0}'.format(self.name))
+        return_query = ','.join([k for k in return_fields.keys()
+                                 if return_fields[k]])
+        query = "record:a?name~={0}".format(self.name)
+        if return_query:
+            query += '&_return_fields=' + return_query
+        resp = self.infoblox_.get(query)
         if resp.status_code != 200:
             try:
                 return self.infoblox_.__caller__(
