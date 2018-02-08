@@ -1,3 +1,9 @@
+"""
+A warapper around record:srv objects. This allows for the modification of DNS
+SRV objects
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/record.srv.html
+"""
 import json
 
 

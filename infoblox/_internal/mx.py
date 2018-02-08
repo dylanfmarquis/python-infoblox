@@ -1,3 +1,9 @@
+"""
+A warapper around record:mx objects. This allows for the modification of
+Mail Exchanger records
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/record.a.html
+"""
 import json
 
 

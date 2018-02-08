@@ -1,3 +1,9 @@
+"""
+A warapper around record:cname objects. This allows for the modification of DNS
+CNAME records.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/record.cname.html
+"""
 import json
 
 

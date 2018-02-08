@@ -1,3 +1,9 @@
+"""
+A warapper around record:rpz:cname objects. This allows for the modification of
+RPZ CNAME entries
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/record.rpz.cname.html
+"""
 import json
 
 

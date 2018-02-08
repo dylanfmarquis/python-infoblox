@@ -1,3 +1,9 @@
+"""
+A warapper around lease objects. This allows for the modification of DHCP
+leases.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/lease.html
+"""
 import json
 
 

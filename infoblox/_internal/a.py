@@ -1,3 +1,9 @@
+"""
+A warapper around record:a objects. This allows for the modification of DNS
+A records.
+WAPI documentation can be found here:
+https://ipam.illinois.edu/wapidoc/objects/record.a.html
+"""
 import json
 
 
