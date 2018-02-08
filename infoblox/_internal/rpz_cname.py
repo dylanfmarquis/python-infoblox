@@ -41,7 +41,8 @@ class _rpz_cname(object):
         input   return_fields (dict)    Key value pairs of data to be returned
         output  resp (parsed json)      Parsed JSON response
         """
-        return_query = ','.join([k for k in return_fields.keys()])
+        return_query = ','.join([k for k in return_fields.keys()
+                                 if return_fields[k]])
         query = "record:rpz:cname?name~={0}".format(self.name)
         if return_query:
             query += '&_return_fields=' + return_query
