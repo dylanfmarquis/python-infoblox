@@ -72,6 +72,9 @@ Subnet
 ```python
 #Query next available IP for a given subnet.
 ip = iblox.subnet('10.1.1.0/24').next_available_ip()
+
+# Get the subnet for a particular IP address
+subnet = iblox.subnet_from_ip('10.1.1.0/24')
 ```
 Lease
 ----
