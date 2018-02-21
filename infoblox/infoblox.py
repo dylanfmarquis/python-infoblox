@@ -252,6 +252,17 @@ class infoblox(object):
         handle = _internal._cname(self, name)
         return handle
 
+    def fixedaddress(self):
+        """
+        fixedaddress - Functions for fixedaddress
+
+        output  handle (handle)     Handle for interacting with fixedaddress
+                                    functions
+        """
+
+        handle = _internal._fixedaddress(self)
+        return handle
+
     def macfilteraddress(self):
         """
         macfilteraddress - Functions for macfilteraddress

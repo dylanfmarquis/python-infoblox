@@ -1,5 +1,6 @@
 from .a import _a
 from .cname import _cname
+from .fixedaddress import _fixedaddress
 from .grid import _grid
 from .host import _host
 from .lease import _lease
