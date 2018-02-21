@@ -252,6 +252,17 @@ class infoblox(object):
         handle = _internal._cname(self, name)
         return handle
 
+    def macfilteraddress(self):
+        """
+        macfilteraddress - Functions for macfilteraddress
+
+        output  handle (handle)     Handle for interacting with macfilteraddress
+                                    functions
+
+        """
+        handle = _internal._macfilteraddress(self)
+        return handle
+
     def mx(self, name):
         """
         mx - MX record (Mail Exchanger) object
