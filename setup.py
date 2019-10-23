@@ -10,6 +10,6 @@ setup(name='python-infoblox',
       download_url='https://github.com/dylanfmarquis/python-infoblox/archive/v0.5.0.tar.gz',
       license='MIT',
       packages=find_packages(),
-      install_requires=['requests==2.18.4', 'future==0.16.0'],
+      install_requires=['requests==2.20.0', 'future==0.16.0'],
       keywords=['infoblox', 'wapi']
       )
